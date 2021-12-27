@@ -5,3 +5,11 @@
 **/*.depend
 **/*.o
 **/*.exe
+**/.vs
+**/debug
+**/obj
+**/*.user
+**/*.vcxproj
+**/*.sln
+**/*.vcxproj.filters
+**/*.vcxproj.user
