@@ -54,8 +54,8 @@ void solve()
 {
     int n;
     cin >> n;
-    vector<double> myvec(n);
-    map<double,double> mymap;
+    vector<int> myvec(n);
+    map<int,int> mymap;
     long double mean = 0;
     for(int i = 0; i < n; i++)
     {
@@ -66,10 +66,15 @@ void solve()
     mean /= (n * 1.0);
 
     long long result = 0;
+    if( (2 * mean) != (int) (2 * mean))
+    {
+        cout << 0 << endl;
+        return;
+    }
     for(int i = 0; i < n; i++)
     {
-        double current = myvec[i];
-        double needed = (2.0 * mean) - current;
+        int current = myvec[i];
+        int needed = (2.0 * mean) - current;
 
 
         if(current == needed)
