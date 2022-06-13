@@ -9,6 +9,63 @@ const int INF = (int) 1e9;
 const int mod = (int)1e9 + 7;
 const int maxn = (int) 1e5 + 10;
 
+
+int knapsack(vector<int>& wt, vector<int>& val, int w, int n, vector<vector<int>>&ans)
+{
+    if(n == 0 || w == 0) return 0;
+    if(ans[n][w] != -1) return ans[n][w];
+    
+    if(wt[n - 1] <= w)
+    { 
+        return ans[n][w] = max (val[n - 1] + knapsack(wt, val, w - wt[n - 1], n - 1, ans), 
+        0 + knapsack(wt, val, w - 0, n - 1, ans));
+    }
+    else return ans[n][w] = 0 + knapsack(wt, val, w - 0, n - 1, ans);
+}
+
+
+int knapsackDP(vector<int>& wt, vector<int>& val, int capacity, int n, vector<vector<int>>& ans)
+{
+    //if(n == 0 || capacity == 0) return 0;
+    for(int i = 0; i < ans.size(); i++)
+    {
+        for(int j = 0; j < ans[0].size(); j++)
+        {
+            if(i == 0 || j == 0) ans[i][j] = 0;
+        }
+    }
+    //if(ans[n][capacity] != -1) return ans[n][capacity];
+    for(int i = 1; i < ans.size(); i++)
+    {
+        for (int j = 1; j < ans[0].size(); j++)
+        {
+            if(wt[i - 1] <= j)
+            {
+                //return ans[n][capacity] = max(val[n - 1] + knapsack(wt, val, capacity - wt[n - 1], n - 1, ans)
+                //0 + knapsack(wt, val, capacity - 0, n - 1, ans));
+                ans[i][j] = max(val[i - 1] + ans[i - 1][j - wt[i - 1]], 
+                                        0 + ans[i - 1][j]);
+            }
+            else 
+            {
+                //return ans[n][capacity] = 0 + knapsack(wt, val, capacity - 0, n - 1, ans);
+                ans[i][j] = 0 + ans[i - 1][j];
+            }
+            
+        }
+    }
+    for(int i = 0; i < ans.size(); i++)
+    {
+        for(int j = 0; j < ans[0].size(); j++)
+        {
+            cout << ans[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return ans[n][capacity];
+}
+
+
 void power(int a, int n)
 {
     int res = 1;
@@ -730,55 +787,6 @@ void solve5()
 
 
 
-void solve6()
-{
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for(auto &e : a) cin >> e;
-    sort(a.begin(), a.end());
-    vector<int> maxi, mini;
-
-    for(int i = 0; i < (n + 1) / 2; i++) mini.push_back(a[i]);
-    for(int i = (n + 1) / 2; i < n; i++) maxi.push_back(a[i]);
-
-    vector<int> ans(n + 1);
-    vector<bool> where(n + 1);
-    int last = -1;
-    for(int i = 2; i <= n; i += 2)
-    {
-        ans[i] = maxi[(i - 2) / 2];
-        where[i] = true;
-        last = i;
-    }
-
-    for(int i = 1; i <= n; i += 2)
-    {
-        ans[i] = mini[(i - 1) / 2];
-        where[i] = false;
-    }
-
-    if(last == n) last -= 2;
-    bool cur = true;
-
-    for(int i = 2; i <= last; i+= 2)
-    {
-        if(ans[i - 1] < ans[i] && ans[i] > ans[i + 1]) cur &= true;
-        else cur &= false;
-    }
-    if(ans[n - 1] < ans[n] && ans[n] > ans[1]) cur &= true;
-    else cur &= false;
-    if(ans[n] > ans[1] && ans[1] < ans[2]) cur &= true;
-    else cur &= false;
-    if(cur == false || (where[1] == false && where[n] == false))
-    {
-        cout << "NO" << endl;
-        return;
-    }
-    cout << "YES" << endl;
-    for(int i = 1; i <= n; i++) cout << ans[i] << " ";
-    cout << endl;
-}
 
 
 int bubblesort(vector<int>& a, vector<int>& b, vector<pair<int, int>>& ans)
@@ -882,46 +890,229 @@ int mergesort2util(vector<pair<int, int>>&c, vector<pair<int,int>>& ans)
 }
 
 
-void solve8()
+void solve1685B()
+{
+    ll n, a, b, c, d;
+    cin >> a >> b >> c >> d;
+    string s;
+    cin >> s;
+    if(count(s.begin(), s.end(), 'A') != a + c + d)
+    {
+        cout <<"NO" << endl; return;
+    }
+    
+    n = a + b + 2 * c + 2 * d;
+    s += string(1, s[n - 1]);
+    
+    string curr = string(1, s[0]);
+    vector<ll> AB, BA;
+    ll commoncount = 0;
+    
+    for(ll i = 1; i <= n; i++)
+    {
+        if(s[i] == s[i - 1])
+        {
+            if(curr.size() == 1)
+            {
+                
+            }
+            else if(curr.size() & 1)
+            {
+                commoncount += curr.size() / 2;
+            }
+            else
+            {
+                if(curr[0] == 'A') AB.push_back(curr.size() / 2);
+                else BA.push_back(curr.size() / 2);
+            }
+            curr = "";
+        }
+        curr.push_back(s[i]);
+    }
+    
+    sort(AB.begin(), AB.end());
+    sort(BA.begin(), BA.end());
+    
+    ll cntAB = 0, cntBA = 0, commoncountleft = commoncount;
+    
+    
+    for(auto &x : AB)
+    {
+        ll req = c - cntAB;
+        if(req >= x)
+        {
+            cntAB += x;
+            x = 0;
+        }
+        else
+        {
+            cntAB += req;
+            x -= req;
+        }
+    }
+    
+    for(auto &x : BA)
+    {
+        ll req = d - cntBA;
+        if(req >= x)
+        {
+            cntBA += x;
+            x = 0;
+        }
+        else
+        {
+            cntBA += req;
+            x -= req;
+        }
+    }
+    
+    if(cntAB < c)
+    {
+        ll required = c - cntAB;
+        cntAB += min(required, commoncountleft);
+        commoncountleft -= min(required, commoncountleft);
+        required = c - cntAB;
+        if(required > 0)
+        {
+            for(auto &x : BA)
+            {
+                if(x == 0) continue;
+                ll req = c - cntAB;
+                if(req >= x - 1)
+                {
+                    cntAB += x - 1;
+                    x -= x;
+                }
+                else
+                {
+                    cntAB += req;
+                    x -= req + 1;
+                }
+            }
+        }
+    }
+    
+    if(cntBA < d)
+    {
+        ll required = d - cntBA;
+        cntBA += min(required, commoncountleft);
+        commoncountleft -= min(required, commoncountleft);
+        
+        required = d - cntBA;
+        if(required > 0)
+        {
+            for(auto &x : AB)
+            {
+                if(x == 0) continue;
+                ll req = d - cntBA;
+                if(req >= x - 1)
+                {
+                    cntBA += x - 1;
+                    x -= x;
+                }
+                else
+                {
+                    cntBA += req;
+                    x -= req + 1;
+                }
+            }
+        }
+    }
+    if(cntAB >= c && cntBA >= d) cout << "YES" << endl;
+    else cout << "NO" << endl;
+}
+
+
+void solve1697C()
 {
     int n;
     cin >> n;
-    vector<int> a(n), b(n);
-    vector<pair<int, int>> c(n);
-    for(auto &e : a) cin >> e;
-    for(auto &e : b) cin >> e;
-    for(int i = 0; i < n; i++) c[i] = {a[i], b[i]};
-    vector<pair<int, int>> ans;
-    int moves = mergesort2util(c, ans);
-    bool flag = true;
+    string s, t;
+    cin >> s >> t;
+    string s2, t2;
     
-    //for(auto elem : c) cout << "( "<< elem.first << " "<< elem.second <<" )"; cout << endl;
-    for(int i = 0; i < n - 1; i++)
+    for(int i = 0; i < n; i++)
     {
-        if(c[i].first > c[i + 1].first || c[i].second > c[i + 1].second) flag &= false;
-        else flag &= true;
+        if(s[i] != 'b') s2.push_back(s[i]);
+        if(t[i] != 'b') t2.push_back(t[i]);
+    }
+    //cout << s2 << endl << t2 <<endl;
+    if(s2 != t2) {cout << "NO" << endl; return;}
+    
+    vector<int>saindx, taindx;
+    for(int i = 0; i < n; i++)
+    {
+        if(s[i] == 'a') saindx.push_back(i);
+        if(t[i] == 'a') taindx.push_back(i);
+    }
+    //for(auto elem : saindx) cout << elem <<" "; cout << endl;
+    //for(auto elem : taindx) cout << elem <<" "; cout << endl;
+    
+    for(int i = 0; i < saindx.size(); i++)
+    {
+        if(saindx[i] > taindx[i])
+        {
+            cout << "NO" << endl; return;
+        }
     }
     
-    if(flag == false) cout << -1 << endl;
+    vector<int>scindx, tcindx;
+    for(int i = 0; i < n; i++)
+    {
+        if(s[i] == 'c') scindx.push_back(i);
+        if(t[i] == 'c') tcindx.push_back(i);
+    }
+    //for(auto elem : scindx) cout << elem <<" "; cout << endl;
+    //for(auto elem : tcindx) cout << elem <<" "; cout << endl;
+    
+    for(int i = 0; i < scindx.size(); i++)
+    {
+        if(scindx[i] < tcindx[i])
+        {
+            cout << "NO" << endl; return;
+        }
+    }
+    cout << "YES" << endl;
+}
+
+bool targetsum(vector<int>& a, int sum, int n, vector<vector<int>>& ans) 
+{
+    if(sum == 0) return true;
+    if(n == 0 && sum > 0) return false;
+    
+    if(ans[n][sum] != -1) return ans[n][sum];
+    
+    if(a[n - 1] <= sum)
+    {
+        return ans[n][sum] = targetsum(a, sum - a[n - 1], n - 1, ans) || targetsum(a, sum, n - 1, ans);
+    }
     else
     {
-        cout << moves << endl;
-        for(auto elem : ans)
-        {
-            cout << elem.first + 1<< " " << elem.second + 1<< endl;
-        }
+        return ans[n][sum] = targetsum(a, sum, n - 1, ans);
     }
 }
 
 
-
+void solve1527B1()
+{
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    ll cnt = count(s.begin(), s.end(), '0');
+    if(cnt == 1 || cnt % 2 == 0) cout << "BOB" << endl;
+    else cout << "ALICE" << endl;
+    
+}
 
 int main()
 {
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     int t = 1;
     cin >> t;
-    while(t--) {solve8();}
-
+    while(t--) {solve1527B1();}
+    /*vector<int> a = {2, 3, 7, 8, 10};
+    int sum = 111;
+    vector<vector<int>> ans(a.size() + 1, vector<int>(sum + 1, -1));
+    cout << targetsum(a, sum, a.size(), ans);*/
 }
-
