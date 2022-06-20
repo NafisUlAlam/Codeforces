@@ -9,6 +9,127 @@ const int INF = (int) 1e9;
 const int mod = (int)1e9 + 7;
 const int maxn = (int) 1e5 + 10;
 
+
+int knapsack(vector<int>& wt, vector<int>& val, int w, int n, vector<vector<int>>&ans)
+{
+    if(n == 0 || w == 0) return 0;
+    if(ans[n][w] != -1) return ans[n][w];
+    
+    if(wt[n - 1] <= w)
+    { 
+        return ans[n][w] = max (val[n - 1] + knapsack(wt, val, w - wt[n - 1], n - 1, ans), 
+        0 + knapsack(wt, val, w - 0, n - 1, ans));
+    }
+    else return ans[n][w] = 0 + knapsack(wt, val, w - 0, n - 1, ans);
+}
+
+
+int knapsackDP(vector<int>& wt, vector<int>& val, int capacity, int n, vector<vector<int>>& ans)
+{
+    //if(n == 0 || capacity == 0) return 0;
+    for(int i = 0; i < ans.size(); i++)
+    {
+        for(int j = 0; j < ans[0].size(); j++)
+        {
+            if(i == 0 || j == 0) ans[i][j] = 0;
+        }
+    }
+    //if(ans[n][capacity] != -1) return ans[n][capacity];
+    for(int i = 1; i < ans.size(); i++)
+    {
+        for (int j = 1; j < ans[0].size(); j++)
+        {
+            if(wt[i - 1] <= j)
+            {
+                //return ans[n][capacity] = max(val[n - 1] + knapsack(wt, val, capacity - wt[n - 1], n - 1, ans)
+                //0 + knapsack(wt, val, capacity - 0, n - 1, ans));
+                ans[i][j] = max(val[i - 1] + ans[i - 1][j - wt[i - 1]], 
+                                        0 + ans[i - 1][j]);
+            }
+            else 
+            {
+                //return ans[n][capacity] = 0 + knapsack(wt, val, capacity - 0, n - 1, ans);
+                ans[i][j] = 0 + ans[i - 1][j];
+            }
+            
+        }
+    }
+    for(int i = 0; i < ans.size(); i++)
+    {
+        for(int j = 0; j < ans[0].size(); j++)
+        {
+            cout << ans[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return ans[n][capacity];
+}
+
+void subsetgenerator2(vector<int>& given, int n, vector<int> subset, vector<vector<int>>& ans)
+{
+    if(n == 0)
+    {
+        ans.push_back(subset);
+        return;
+    }
+    subsetgenerator2(given, n - 1, subset, ans);
+    subset.push_back(given[n - 1]);
+    subsetgenerator2(given, n - 1, subset, ans);
+}
+
+void subsetgenerator3withbacktrack(vector<int>& given, int n, vector<int>& subset, vector<vector<int>>& ans)
+{
+    if(n == 0)
+    {
+        ans.push_back(subset);
+        return;
+    }
+    subsetgenerator3withbacktrack(given, n - 1, subset, ans);
+    subset.push_back(given[n - 1]);
+    subsetgenerator3withbacktrack(given, n - 1, subset, ans);
+    subset.pop_back();
+}
+
+
+
+void subsetWithKElements(vector<int>&given, int k, vector<vector<int>>& ans)
+{
+    int n = given.size();
+    for(int i = 1; i < pow(2, n); i++)
+    {
+        int z = i;
+        vector<int> binary;
+        while(z > 0)
+        {
+            int rem = z % 2;
+            binary.push_back(rem);
+            z = z / 2;
+        }
+        int p = n - binary.size();
+
+        for(int j = 1; j <= p; j++) binary.push_back(0);
+        reverse(binary.begin(), binary.end());
+
+        //for(auto elem : binary) cout << elem << " "; cout << endl;
+        int cnt = 0;
+
+        for(int j = 0; j < binary.size(); j++)
+        {
+            if(binary[j] == 1) cnt++;
+        }
+        //cout << cnt << endl;
+        if(cnt == k)
+        {
+            vector<int> subset;
+            for(int j = 0; j < binary.size(); j++)
+            {
+                if(binary[j] == 1) subset.push_back(given[j]);
+            }
+            ans.push_back(subset);
+        }
+        //binary.clear();
+    }
+}
 void power(int a, int n)
 {
     int res = 1;
@@ -730,55 +851,6 @@ void solve5()
 
 
 
-void solve6()
-{
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for(auto &e : a) cin >> e;
-    sort(a.begin(), a.end());
-    vector<int> maxi, mini;
-
-    for(int i = 0; i < (n + 1) / 2; i++) mini.push_back(a[i]);
-    for(int i = (n + 1) / 2; i < n; i++) maxi.push_back(a[i]);
-
-    vector<int> ans(n + 1);
-    vector<bool> where(n + 1);
-    int last = -1;
-    for(int i = 2; i <= n; i += 2)
-    {
-        ans[i] = maxi[(i - 2) / 2];
-        where[i] = true;
-        last = i;
-    }
-
-    for(int i = 1; i <= n; i += 2)
-    {
-        ans[i] = mini[(i - 1) / 2];
-        where[i] = false;
-    }
-
-    if(last == n) last -= 2;
-    bool cur = true;
-
-    for(int i = 2; i <= last; i+= 2)
-    {
-        if(ans[i - 1] < ans[i] && ans[i] > ans[i + 1]) cur &= true;
-        else cur &= false;
-    }
-    if(ans[n - 1] < ans[n] && ans[n] > ans[1]) cur &= true;
-    else cur &= false;
-    if(ans[n] > ans[1] && ans[1] < ans[2]) cur &= true;
-    else cur &= false;
-    if(cur == false || (where[1] == false && where[n] == false))
-    {
-        cout << "NO" << endl;
-        return;
-    }
-    cout << "YES" << endl;
-    for(int i = 1; i <= n; i++) cout << ans[i] << " ";
-    cout << endl;
-}
 
 
 int bubblesort(vector<int>& a, vector<int>& b, vector<pair<int, int>>& ans)
@@ -882,46 +954,497 @@ int mergesort2util(vector<pair<int, int>>&c, vector<pair<int,int>>& ans)
 }
 
 
-void solve8()
+void solve1685B()
+{
+    ll n, a, b, c, d;
+    cin >> a >> b >> c >> d;
+    string s;
+    cin >> s;
+    if(count(s.begin(), s.end(), 'A') != a + c + d)
+    {
+        cout <<"NO" << endl; return;
+    }
+    
+    n = a + b + 2 * c + 2 * d;
+    s += string(1, s[n - 1]);
+    
+    string curr = string(1, s[0]);
+    vector<ll> AB, BA;
+    ll commoncount = 0;
+    
+    for(ll i = 1; i <= n; i++)
+    {
+        if(s[i] == s[i - 1])
+        {
+            if(curr.size() == 1)
+            {
+                
+            }
+            else if(curr.size() & 1)
+            {
+                commoncount += curr.size() / 2;
+            }
+            else
+            {
+                if(curr[0] == 'A') AB.push_back(curr.size() / 2);
+                else BA.push_back(curr.size() / 2);
+            }
+            curr = "";
+        }
+        curr.push_back(s[i]);
+    }
+    
+    sort(AB.begin(), AB.end());
+    sort(BA.begin(), BA.end());
+    
+    ll cntAB = 0, cntBA = 0, commoncountleft = commoncount;
+    
+    
+    for(auto &x : AB)
+    {
+        ll req = c - cntAB;
+        if(req >= x)
+        {
+            cntAB += x;
+            x = 0;
+        }
+        else
+        {
+            cntAB += req;
+            x -= req;
+        }
+    }
+    
+    for(auto &x : BA)
+    {
+        ll req = d - cntBA;
+        if(req >= x)
+        {
+            cntBA += x;
+            x = 0;
+        }
+        else
+        {
+            cntBA += req;
+            x -= req;
+        }
+    }
+    
+    if(cntAB < c)
+    {
+        ll required = c - cntAB;
+        cntAB += min(required, commoncountleft);
+        commoncountleft -= min(required, commoncountleft);
+        required = c - cntAB;
+        if(required > 0)
+        {
+            for(auto &x : BA)
+            {
+                if(x == 0) continue;
+                ll req = c - cntAB;
+                if(req >= x - 1)
+                {
+                    cntAB += x - 1;
+                    x -= x;
+                }
+                else
+                {
+                    cntAB += req;
+                    x -= req + 1;
+                }
+            }
+        }
+    }
+    
+    if(cntBA < d)
+    {
+        ll required = d - cntBA;
+        cntBA += min(required, commoncountleft);
+        commoncountleft -= min(required, commoncountleft);
+        
+        required = d - cntBA;
+        if(required > 0)
+        {
+            for(auto &x : AB)
+            {
+                if(x == 0) continue;
+                ll req = d - cntBA;
+                if(req >= x - 1)
+                {
+                    cntBA += x - 1;
+                    x -= x;
+                }
+                else
+                {
+                    cntBA += req;
+                    x -= req + 1;
+                }
+            }
+        }
+    }
+    if(cntAB >= c && cntBA >= d) cout << "YES" << endl;
+    else cout << "NO" << endl;
+}
+
+
+void solve1697C()
 {
     int n;
     cin >> n;
-    vector<int> a(n), b(n);
-    vector<pair<int, int>> c(n);
-    for(auto &e : a) cin >> e;
-    for(auto &e : b) cin >> e;
-    for(int i = 0; i < n; i++) c[i] = {a[i], b[i]};
-    vector<pair<int, int>> ans;
-    int moves = mergesort2util(c, ans);
-    bool flag = true;
+    string s, t;
+    cin >> s >> t;
+    string s2, t2;
     
-    //for(auto elem : c) cout << "( "<< elem.first << " "<< elem.second <<" )"; cout << endl;
-    for(int i = 0; i < n - 1; i++)
+    for(int i = 0; i < n; i++)
     {
-        if(c[i].first > c[i + 1].first || c[i].second > c[i + 1].second) flag &= false;
-        else flag &= true;
+        if(s[i] != 'b') s2.push_back(s[i]);
+        if(t[i] != 'b') t2.push_back(t[i]);
+    }
+    //cout << s2 << endl << t2 <<endl;
+    if(s2 != t2) {cout << "NO" << endl; return;}
+    
+    vector<int>saindx, taindx;
+    for(int i = 0; i < n; i++)
+    {
+        if(s[i] == 'a') saindx.push_back(i);
+        if(t[i] == 'a') taindx.push_back(i);
+    }
+    //for(auto elem : saindx) cout << elem <<" "; cout << endl;
+    //for(auto elem : taindx) cout << elem <<" "; cout << endl;
+    
+    for(int i = 0; i < saindx.size(); i++)
+    {
+        if(saindx[i] > taindx[i])
+        {
+            cout << "NO" << endl; return;
+        }
     }
     
-    if(flag == false) cout << -1 << endl;
+    vector<int>scindx, tcindx;
+    for(int i = 0; i < n; i++)
+    {
+        if(s[i] == 'c') scindx.push_back(i);
+        if(t[i] == 'c') tcindx.push_back(i);
+    }
+    //for(auto elem : scindx) cout << elem <<" "; cout << endl;
+    //for(auto elem : tcindx) cout << elem <<" "; cout << endl;
+    
+    for(int i = 0; i < scindx.size(); i++)
+    {
+        if(scindx[i] < tcindx[i])
+        {
+            cout << "NO" << endl; return;
+        }
+    }
+    cout << "YES" << endl;
+}
+
+bool targetsum(vector<int>& a, int sum, int n, vector<vector<int>>& ans) 
+{
+    if(sum == 0) return true;
+    if(n == 0 && sum > 0) return false;
+    
+    if(ans[n][sum] != -1) return ans[n][sum];
+    
+    if(a[n - 1] <= sum)
+    {
+        return ans[n][sum] = targetsum(a, sum - a[n - 1], n - 1, ans) || targetsum(a, sum, n - 1, ans);
+    }
     else
     {
-        cout << moves << endl;
-        for(auto elem : ans)
-        {
-            cout << elem.first + 1<< " " << elem.second + 1<< endl;
-        }
+        return ans[n][sum] = targetsum(a, sum, n - 1, ans);
     }
 }
 
+
+void solve1527B1()
+{
+    int n;
+    cin >> n; 
+    string s;
+    cin >> s;
+    ll cnt = count(s.begin(), s.end(), '0');
+    if(cnt == 1 || cnt % 2 == 0) cout << "BOB" << endl;
+    else cout << "ALICE" << endl;
+    
+}
+
+void solve1674E()
+{
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for(auto &e : a) cin >> e;
+    int ans = INF;
+    for(int i = 0; i <= n - 3; i++)
+    {
+       int currans = (a[i] + a[i + 2] + 1) / 2;
+       ans = min(ans, currans);
+    }
+    
+    for(int i = 0; i <= n - 2; i++)
+    {
+       int x = max(a[i], a[i + 1]);
+       int y = min(a[i], a[i + 1]);
+       if(2 * y <= x)
+       {
+          int currans = (x + 1) / 2;
+          ans = min(currans, ans);
+       }
+       else
+       {
+          int currans = x - y;
+          x = 2 * y - x;
+          y = x;
+          currans += (x * 2 + 2) / 3;
+          ans = min(ans, currans);
+       }
+    }
+    sort(a.begin(), a.end());
+    int currans = (a[0] + 1) / 2 + (a[1] + 1) / 2;
+    ans = min(currans, ans);
+    cout << ans << endl;
+
+}
+
+
+void solve1406B()
+{
+   ll n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto &e : a) cin >> e;
+   sort(a.begin(), a.end());
+   ll ans = -1e18;
+   for(int i = 0; i <= 5; i++)
+   {
+      int ee = (n - 1 + i) % n;
+      int dd = (n - 2 + i) % n;
+      int cc = (n - 3 + i) % n;
+      int bb = (n - 4 + i) % n;
+      int aa = (n - 5 + i) % n;
+      ll curr = a[ee] * 1ll * a[dd] * a[cc] * a[bb] * a[aa];
+      ans = max(ans, curr);
+   }
+   cout << ans << endl;
+
+}
+
+void solve1692F()
+{
+   int n; 
+   cin >> n;
+   vector<int> cnt(10, 0);
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      cnt[x % 10]++;
+   }
+   
+   vector<int> a;
+   for(int i = 0; i < 10; i++)
+   {
+      for(int j = 0; j < min(3, cnt[i]); j++) a.push_back(i);
+   }
+   
+   int sz = a.size();
+   for(int i = 0; i < sz; i++)
+   {
+      for(int j = i + 1; j < sz; j++)
+      {
+         for(int k = j + 1; k < sz; k++)
+         {
+            if((a[i] + a[j] + a[k]) % 10 == 3) 
+            {
+               cout << "YES" << endl;
+               return;
+            }
+         }
+      }
+   }
+   cout <<"NO" << endl;
+}
+
+void solve1692G()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n), b(n - 1, 0), pref(n - 1, 0);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   for(int i = 0; i <= n - 2; i++)
+   {
+      if(a[i] < 2 * a[i + 1]) b[i] = 1;
+      else b[i] = 0;
+   }
+   
+   //prefix sum
+   pref[0] = b[0];
+   for(int i = 1; i <= n - 2; i++) pref[i] = pref[i - 1] + b[i];
+   
+   int ans = 0;
+   for(int i = 0; i <= n - k - 1; i++)
+   {
+      if(i == 0 && pref[i + k - 1] == k) ans++; 
+      else if(pref[i + k - 1] - pref[i - 1] == k) ans++;
+   }
+   
+   cout << ans << endl;
+   
+   //sliding window
+   /*int curr = 0, res = 0;
+   for(int i = 0; i < k; i++)
+   {
+      curr += b[i];
+   }
+   
+   if(curr == k) res++;
+   for(int i = k, j = 0; i <= n - 2; i++)
+   {
+      curr += b[i];
+      curr -= b[j++];
+      if(curr == k) res++;
+   }
+   cout << res << endl;*/
+}
+
+void solve1694B()
+{
+   int n;
+   cin >> n;
+   vector<int> a;
+   string s;
+   cin >> s;
+   for(int i = 0; i <= n - 2; i++)
+   {
+      if(s[i] != s[i + 1]) a.push_back(1);
+      else a.push_back(0);
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   ll cnt = ((n + 1) * 1ll * n) / 2;
+   
+   for(int i = 0; i < a.size(); i++)
+   {
+      if(a[i] == 1) continue;
+      cnt--;
+      cnt = cnt - i;
+   }
+   cout << cnt << endl;
+}
+
+void solve1694A()
+{
+   int zeros, ones;
+   cin >> zeros >> ones;
+   string s;
+   int diff = abs(zeros - ones);
+   if(diff > min(zeros, ones))
+   {
+      if(zeros < ones)
+      {
+         s += string(zeros, '0');
+         s += string(ones, '1');
+      }
+      else
+      {
+         s += string(ones, '1');
+         s += string(zeros, '0');
+      }
+   }
+   else if(diff == 0)
+   {
+      for(int i = 1; i <= zeros + ones; i++)
+      {
+         if(i % 2 == 1) s += '1';
+         else s += '0';
+      }
+   }
+   else
+   {
+     while(zeros > 0 && ones > 0)
+      {
+         if(zeros >= diff)
+         {
+            s += string(diff, '0');
+            zeros -= diff;
+         }
+         else
+         {
+            s += string(zeros, '0');
+            zeros = 0;
+         }
+         
+         if(ones >= diff)
+         {
+            s += string(diff, '1');
+            ones -= diff;
+         }
+         else
+         {
+            s += string(ones, '1');
+            ones = 0;
+         }
+         
+      }
+      if(zeros > 0) {s+= string(zeros, '0');}
+      if(ones > 0) {s += string(ones, '1');}
+   }
+   cout << s << endl;
+}
+
+void solve1692H()
+{
+   int n;
+   cin >> n;
+   vector<int>a(n);
+   for(auto& e : a) cin >> e;
+   vector<int>dp(n, 1);
+   map<int, int> pos;
+   int idx = -1, ma = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(pos.count(a[i]))
+      {
+         dp[i] = max(dp[i], dp[pos[a[i]]] + 1 - (i - pos[a[i]] - 1));
+      }
+      if(dp[i] > ma)
+      {
+         ma = dp[i];
+         idx = i;
+      }
+      pos[a[i]] = i;
+   }
+   
+   int r = idx;
+   int l = idx;
+   int p = a[l];
+   
+   /*while(ma)
+   {
+      if(a[l] == p) ma--;
+      else ma++;
+      l--;
+   }
+   cout << p << " " << l + 2 << " " << r + 1 << endl;*/
+   for(; l>= 0; l--)
+   {
+      if(dp[l] == 1 && a[l] == p) break;
+   }
+   
+   cout << p << " " << l + 1 << " " << r + 1 << endl;
+}
 
 
 
 int main()
-{
+{ 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     int t = 1;
     cin >> t;
-    while(t--) {solve8();}
+    while(t--) {solve1692H();}
 
+    /*vector<int> a = {2, 3, 7, 8, 10};
+    int sum = 111;
+    vector<vector<int>> ans(a.size() + 1, vector<int>(sum + 1, -1));
+    cout << targetsum(a, sum, a.size(), ans);*/
 }
-
