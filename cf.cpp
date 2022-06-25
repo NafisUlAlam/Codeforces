@@ -1726,10 +1726,10 @@ void solve1696B()
    cin >> n;
    vector<int> a(n);
    for(int i = 0; i < n; i++) cin >> a[i];
-   //a.push_back(0);
+   a.push_back(0);
    int l = 0, r = 0;
    int segs = 0;
-   for(r = 0; r < n; r++)
+   for(r = 0; r <= n; r++)
    {
       //cout << "entering r "<< r << endl;
       if(a[r] == 0)
@@ -1738,17 +1738,18 @@ void solve1696B()
          {
             segs++;
          }
-         while(a[r] == 0)
+         while(r <= n && a[r] == 0)
          {
             r++;
          }
          //cout << r << endl;
+         if(r > n) break;
          l = r;
          //r--;
       }
       
    }
-   if(l < n) segs++;
+   //if(l < n) segs++;
    //cout << segs << endl;
    cout << min(segs, 2) << endl;
 }
