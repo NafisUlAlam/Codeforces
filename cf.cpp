@@ -1625,6 +1625,165 @@ void solve1360D()
    }
 }
 
+void solve1647B()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<vector<int>> a(n, vector<int>(m));
+   for(int i = 0; i < n; i++)
+   {
+      string s;
+      cin >> s;
+      for(int j = 0; j < m; j++) 
+      {
+         if(s[j] == '0') a[i][j] = 0;
+         else a[i][j] = 1;
+      }
+   }
+   
+   for(int i = 0; i <= n - 2; i++)
+   {
+      for(int j = 0; j <= m - 2; j++)
+      {
+         int cnt = 0;
+         for(int curr = i; curr <= i + 1; curr++)
+         {
+            for(int curr2 = j; curr2 <= j + 1; curr2++)
+            {
+               //cout << curr << " " << curr2 << endl;
+               if(a[curr][curr2] == 1) cnt++;
+               //cout << "cnt :" << cnt << endl;
+            }
+         }
+         if(cnt == 3) 
+         {
+            cout << "NO" << endl;
+            return;
+         }
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve1637C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   bool allones = true;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+   }
+   for(int i = 1; i <= n - 2; i++)
+   {
+      if(a[i] > 1) allones &= false;
+   }
+   if(allones == true || (n == 3 && a[1] % 2 == 1))
+   {
+      cout << -1 << endl;
+      return;
+   }
+   
+   ll mov = 0;
+   for(int i = 1; i <= n - 2; i++)
+   {
+      mov += (a[i] + 1) / 2;
+   }
+   cout << mov << endl;
+}
+
+void solve1690E()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n);
+   ll ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      ans += a[i] / k;
+      a[i] %= k;
+   }
+   
+   sort(a.begin(), a.end());
+   int l = 0, r = n - 1;
+   while(r - l > 0)
+   {
+      if(a[l] + a[r] >= k)
+      {
+         ans++; r--; l++;
+      }
+      else l++;
+   }
+   cout << ans << endl;
+}
+
+
+void solve1696B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   //a.push_back(0);
+   int l = 0, r = 0;
+   int segs = 0;
+   for(r = 0; r < n; r++)
+   {
+      //cout << "entering r "<< r << endl;
+      if(a[r] == 0)
+      {
+         if(a[l] != 0)
+         {
+            segs++;
+         }
+         while(a[r] == 0)
+         {
+            r++;
+         }
+         //cout << r << endl;
+         l = r;
+         //r--;
+      }
+      
+   }
+   if(l < n) segs++;
+   //cout << segs << endl;
+   cout << min(segs, 2) << endl;
+}
+
+
+void solve1696A()
+{
+   int n, z;
+   cin >> n >> z;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   
+   ll maxi = 0;
+   ll prevmaxi = -1;
+   ll prevz = -1;
+   ll ind = -1;
+   while(prevmaxi != maxi)
+   {
+      for(int i = 0; i < n; i++)
+      {
+         //cout << "maxi" << maxi << endl;
+         //cout << "or : " << (a[i] | z) << endl;
+         if((a[i] | z) > maxi)
+         {
+            maxi = a[i] | z;
+            ind = i;
+         }
+      }
+      //prevz = z;
+      z = a[ind] & z;
+      a[ind] = maxi;
+      prevmaxi = maxi;
+   }
+   cout << maxi << endl;
+}
 
 int main()
 { 
@@ -1634,11 +1793,6 @@ int main()
     while(t--) 
     {
        //solve1692EFromPC();
-       //solve1360D();
+       //solve1690E();
     }
-
-    /*vector<int> a = {2, 3, 7, 8, 10};
-    int sum = 111;
-    vector<vector<int>> ans(a.size() + 1, vector<int>(sum + 1, -1));
-    cout << targetsum(a, sum, a.size(), ans);*/
 }
