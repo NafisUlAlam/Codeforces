@@ -3186,6 +3186,146 @@ void solve1711C()
    
 }
 
+void solve1711B()
+{
+   ll n, m;
+   cin >> n >> m;
+   vector<vector<ll>>a(n + 1);
+   vector<ll> cost(n + 1);
+   vector<pair<ll, ll>> edges(m);
+   for(ll i = 0; i < n; i++) cin >> cost[i + 1];
+   for(ll i = 0; i < m; i++)
+   {
+      ll x, y;
+      cin >> x >> y;
+      edges[i] = {x, y};
+      a[x].push_back(y);
+      a[y].push_back(x);
+   }
+   ll ans = 1e18;
+   
+   if(m % 2 == 0) 
+   {
+      cout << 0 << endl;
+      return;
+   }
+   for(ll i = 1; i <= n; i++)
+   {
+      if(a[i].size() % 2 == 1) ans = min(ans, cost[i]);
+      
+   }
+   for(ll i = 0; i < m; i++)
+   {
+      ll p = edges[i].first;
+      ll q = edges[i].second;
+      if((a[p].size() % 2 == 0) && (a[q].size() % 2 == 0)) ans = min(ans, cost[p] + cost[q]);
+   }
+   cout << ans << endl;
+}
+
+
+void solve1672C()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(auto &e : a) cin >> e;
+   int l = -1, r = -1;
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(a[i] == a[i + 1])
+      {
+         if(l == -1)
+         {
+            l = i;
+         }
+         r = i;
+      }
+   }
+   if(l == r) cout << 0 << endl;
+   else cout << max(1, r - l - 1) << endl;
+}
+
+void solve1703G()
+{
+   ll n, k;
+   cin >> n >> k;
+   vector<ll> a(n);
+   for(auto & e: a) cin >> e;
+   ll sum = 0, ans = 0;
+   
+   for(ll i = -1; i < n; i++)
+   {
+      if(i >= 0) sum += a[i] - k;
+      ll now = 0;
+      now += sum;
+      //ll now = sum;
+      for(ll j = i + 1; j < min(n, i + 32); j++)
+      {
+         ll copy = a[j];
+         copy >>= j - i;
+         now += copy;
+      }
+      ans = max(ans, now);
+      
+      //if(i + 1 < n) sum += a[i + 1] - k;
+      
+   }
+   cout << ans << endl;
+   
+}
+void solve1702F()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n), b(n);
+   map<ll, ll> freq;
+   
+   for(ll i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      while(a[i] % 2 == 0) a[i] = a[i] / 2;
+      freq[a[i]]++;
+   }
+   
+   for(ll i = 0; i < n; i++)
+   {
+      cin >> b[i];
+      while(b[i] % 2 == 0) b[i] = b[i] / 2;
+   }
+   
+   for(ll i = 0; i < n; i++)
+   {
+      bool flag = false;
+      while(b[i] > 0)
+      {
+         if(freq[b[i]] > 0)
+         {
+            freq[b[i]]--;
+            flag = true;
+            break;
+         }
+         else b[i] /= 2;
+      }
+      if(flag == false)
+      {
+         cout << "NO" << endl;
+         return;
+      }
+     /* while(b[i] > 0 && freq[b[i]] <= 0)
+      {
+         b[i] /= 2;
+      }
+      if(freq[b[i]] == 0)
+      {
+         cout << "NO" << endl;
+         return;
+      }
+      else freq[b[i]]--;*/
+   }
+   cout << "YES" << endl;
+   
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
