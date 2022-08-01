@@ -3326,6 +3326,231 @@ void solve1702F()
    cout << "YES" << endl;
    
 }
+void solve1472C()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n + 1), pref(n + 1, 0);
+   for(ll i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      pref[i] = a[i];
+   }
+   
+   for(ll i = 1; i <= n; i++)
+   {
+      if(i + a[i] <= n)pref[i + a[i]] = max(pref[i + a[i]], pref[i] + a[i + a[i]]);
+   }
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   cout << *max_element(pref.begin(), pref.end()) << endl;
+}
+
+void solve1365B()
+{
+   int n, cnta = 0, cntb = 0;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   for(int i = 0; i < n; i++) 
+   {
+      int x;
+      cin >> x;
+      if(x == 0) cnta++;
+      else cntb++;
+   }
+   
+   if(cnta > 0 && cntb > 0)
+   {
+      cout << "YES" << endl;
+      return;
+   }
+   
+   for(int i = 0; i + 1< n; i++)
+   {
+      if(a[i] > a[i + 1])
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   cout << "YES" << endl;
+   
+   
+}
+
+void solve1704B()
+{
+   ll n, x;
+   cin >> n >> x;
+   vector<ll> a(n);
+   vector<pair<ll, ll>> b(n);
+   for(ll i = 0; i < n; i++) cin >> a[i];
+   for(int i = 0; i < n; i++)
+   {
+      ll f = max(0ll, a[i] - x);
+      ll s = min((ll)1e9, a[i] + x);
+      b[i] = {f, s};
+   }
+   ll cnt = 0;
+   pair<ll, ll> curr = {b[0].first, b[0].second};
+   for(ll i = 0; i < n; i++)
+   {
+      if((b[i].first >= curr.first && b[i].first <= curr.second)
+      || (b[i].second >= curr.first && b[i].second <= curr.second)
+      || (b[i].first <= curr.first &&  b[i].second >= curr.second))
+      {
+         curr.first = max(curr.first, b[i].first);
+         curr.second = min(curr.second, b[i].second);
+      }
+      else
+      {
+         //cout << i << "Changed" << endl;
+         cnt++;
+         curr.first = b[i].first;
+         curr.second = b[i].second;
+      }
+      //cout << curr.first << " " << curr.second << endl;
+   }
+   cout << cnt << endl;
+}
+
+void solve1704A()
+{
+   int n, m;
+   cin >> n >> m;
+   string a, b;
+   cin >> a; cin >> b;
+   bool flag = true, zero = false, one = false;
+   int p = (int)a.size() - 1, q =(int) b.size() - 1;
+   for(int j = 1; j <= m - 1; j++)
+   {
+      //cout << "HI" << endl;
+      if(a[p] != b[q]) flag = false;
+      p--, q--;
+   }
+   for(int i = 0; i <= p; i++)
+   {
+      if(a[i] == '1') one = true;
+      if(a[i] == '0') zero = true;
+   }
+   //cout << p <<" "<< b[q] <<" "<< zero << " " << one <<  endl;
+   if(flag == false)
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   if(b[q] == '0' && zero == true)
+   {
+      cout << "YES" << endl;
+      return;
+   }
+   if(b[q] == '1' && one == true)
+   {
+      cout << "YES" << endl;
+      return;
+   }
+   cout << "NO" << endl;
+}
+
+void solve1714B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   set<int>st;
+   int mark = -1;
+   for(int i = n - 1; i >= 0; i--)
+   {
+      if(st.empty() || st.find(a[i]) == st.end())
+      {
+         st.insert(a[i]);
+      }
+      else
+      {
+         mark = i;
+         break;
+      }
+   }
+   if(mark == -1) cout << 0 << endl;
+   else cout << mark + 1 << endl;
+}
+
+void solve1714C()
+{
+   int n;
+   cin >> n;
+   string s;
+   int p = 9;
+   while(n > 0)
+   {
+      if(n - p >= 0)
+      {
+         s.push_back(p + '0');
+         n -= p;
+         p--;
+      }
+      else
+      {
+         s.push_back(n + '0');
+         n = 0;
+      }
+   }
+   reverse(s.begin(), s.end());
+   cout << s << endl;
+}
+
+void solve1714A()
+{
+   int n, h, m;
+   cin >> n >> h >> m;
+   pair<int, int> my = {h, m};
+   bool flag = true;
+   vector<pair<int, int>> a(n);
+   for(int i = 0; i < n; i++) 
+   {
+      int x, y;
+      cin >> x >> y;
+      if(x == h && y == m) flag = false;
+      a[i] = {x, y};
+   }
+   
+   if(flag == false) 
+   {
+      cout << 0 <<" " << 0<< endl;
+      return;
+   }
+   
+   pair<int, int> closest = {INT_MAX, INT_MAX};
+   int divi1 = h / 12;
+   int rem1 = h % 12;
+   for(int i = 0; i < n; i++)
+   {
+      if(m > a[i].second)
+      {
+         a[i].second += 60;
+         a[i].first -= 1;
+      }
+      int diff, diff2;
+      diff2 = a[i].second - m;
+      int divi2 = a[i].first / 12;
+      int rem2 = a[i].first % 12;
+      if(divi1 != divi2)
+      {
+         diff = 12 - rem1 + rem2;
+      }
+      else
+      {
+         if(rem2 >= rem1) diff = rem2 - rem1;
+         else diff = 24- (rem1 - rem2);
+      }
+      pair<int,int> curr = {diff, diff2};
+      //cout << curr.first << " " << curr.second << endl;
+      closest = min(curr, closest);
+   }
+   
+   cout << closest.first << " " << closest.second << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -3333,8 +3558,6 @@ int main()
     cin >> t;
     while(t--) 
     {
-       //solve1672C();
-       //solve1692EFromPC();
-       //solve1706C();
+       //run a function
     }
 }
