@@ -3551,6 +3551,80 @@ void solve1714A()
    
    cout << closest.first << " " << closest.second << endl;
 }
+void solve1372B()
+{
+   ll n;
+   cin >> n;
+   ll n1 = n;
+   if(!(n & 1))
+   {
+      cout << n / 2 << " " << n / 2 << endl;
+      return;
+   }
+   
+   vector<ll> divisors;
+   for(ll i = 1; i * i <= n; i++)
+   {
+      if(n % i == 0)
+      {
+         divisors.push_back(i);
+         if(n / i != n) divisors.push_back(n / i);
+         n /= i;
+      }
+   }
+   //for(auto elem : divisors) cout << elem << " "; cout << endl;
+   ll a = *max_element(divisors.begin(), divisors.end());
+   ll b = n1 - a;
+   cout <<a << " "<<  b << endl;
+}
+
+bool isPalindrome(vector<int>& a, int n)
+{
+   if(n % 2 == 0)
+   {
+      for(int i = 0; i < a.size(); i++)
+      {
+         if(a[i] % 2 == 1) return false;
+      }
+   }
+   else
+   {
+      int oddc = 0;
+      for(int i = 0; i < a.size(); i++)
+      {
+         if(a[i] % 2 == 1) oddc++;
+      }
+      if(oddc > 1) return false;
+   }
+   return true;
+}
+void solve276B()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   vector<int> a(26, 0);
+   for(int i = 0; i < n; i++) a[s[i] -'a']++;
+   
+   int oddc = 0;
+   for(int i = 0; i < 26; i++)
+   {
+      if(a[i] % 2 == 1) oddc++;
+   }
+   if(n % 2 == 0)
+   {
+      if(oddc == 0)
+      {
+         cout << "First" << endl;
+         return;
+      }
+      else cout << "Second" << endl;
+   }
+   else
+   {
+      cout << "First" << endl;
+   }
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
