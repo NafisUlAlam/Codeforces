@@ -3625,6 +3625,80 @@ void solve276B()
       cout << "First" << endl;
    }
 }
+void solve450B()
+{
+   int x, y, n, mod = (int)1e9 + 7;
+   cin >> x >> y;
+   cin >> n;
+   n--;
+   vector<int>a(6);
+   a[0] = (x + mod) % mod, a[1] = (y + mod) % mod;
+   for(int i = 2; i < 6; i++)
+   {
+      if(a[i - 1] - a[i - 2] >= 0)a[i] = (a[i - 1] - a[i - 2]) % mod;
+      else a[i] = (a[i - 1] - a[i - 2] + mod) % mod;
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   cout << a[(n % 6)] << endl;
+}
+void solve1538C()
+{
+   int n, l, r;
+   cin >> n >> l >> r;
+   vector<int> a(n);
+   map<int, pair<int, int>>mp;
+   for(auto & e : a) {cin >> e; mp[e].first++, mp[e].second = 0;}
+   sort(a.begin(), a.end());
+   
+   ll ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      int f = l - a[i];
+      //if(f <= 0) f = l;
+      int s = r - a[i];
+      //if(s <= 0) s = r;
+      //cout << f << " " << s << endl;
+      if(s < a[i])
+      {
+         ans += 0;
+         continue;
+      }
+      else if(f > a[i])
+      {
+         int ff = lower_bound(a.begin(), a.end(), f) - a.begin();
+         int ss = upper_bound(a.begin(), a.end(), s) - a.begin();
+         ans += (ss - ff);
+         //cout <<"else if "<< ans << endl;
+      }
+      else
+      {
+         int ff = lower_bound(a.begin(), a.end(), a[i] + 1) - a.begin();
+         int ss = upper_bound(a.begin(), a.end(), s) - a.begin();
+         //if(a[i] == 8) cout << ff << " " << ss << endl;
+         ans += (ss - ff);
+         //cout << ans << endl;
+         mp[a[i]].second = 1;
+         /*int cnt = mp[a[i]];
+         cout << cnt << endl;
+         mp[a[i]]--;
+         ans += ((cnt * 1ll * (cnt - 1)) / 2);*/
+         
+      }
+   }
+   /*for(auto elem : mp)
+   {
+      cout << elem.first << " " << elem.second.first << " " << elem.second.second << " ";
+   }*/
+   for(auto elem : mp)
+   {
+      if(elem.second.second == 1)
+      {
+         int cnt = elem.second.first;
+         ans += ((cnt * 1ll * (cnt - 1)) / 2);
+      }
+   }
+   cout << ans << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
