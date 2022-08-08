@@ -3699,6 +3699,115 @@ void solve1538C()
    }
    cout << ans << endl;
 }
+void solve1409C()
+{
+   ll n;
+   cin >> n;
+   set<ll> st;
+   for(ll i = 1; i <= (ll)1e5; i++) st.insert(i * 1ll * i * i);
+   for(auto it = st.begin(); (*it) <= n; it++)
+   {
+      ll curr = *it;
+      ll need = n - curr;
+      if(st.count(need))
+      {
+         cout << "YES" << endl;
+         return;
+      }
+   }
+   cout << "NO" << endl;
+}
+
+void solve1360E()
+{
+   int n;
+   cin >> n;
+   vector<vector<int>>a(n, vector<int>(n));
+   
+   for(int i = 0; i < n; i++)
+   {
+      string s;
+      cin >> s;
+      for(int j = 0; j < n; j++)
+      {
+         a[i][j] = s[j] - '0';
+      }
+   }
+   /*for(int i = 0; i < n; i++)
+   {
+      for(int j = 0; j < n; j++) cout << a[i][j] << " ";
+      cout << endl;
+   }*/
+   for(int i = n - 2; i >= 0; i--)
+   {
+      for(int j = n - 2; j >= 0; j--)
+      {
+         //cout << a[i][j] << " " << a[i][j + 1] << " " << a[i + 1][j] << endl;
+         if(a[i][j] == 1 && a[i][j + 1] == 0 && a[i + 1][j] == 0) 
+         {
+            cout << "NO" << endl;
+            return;
+         }
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve1367C()
+{
+   int n, k;
+   cin >> n >> k;
+   string s, s1 = string(k, '0'), s2 = "1";
+   cin >> s;
+   s = s2 + s1 + s + s1 + s2;
+   //cout << s << endl;
+   n = s.size();
+   vector<int> ones;
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == '1') ones.push_back(i);
+   }
+   int n1 = ones.size();
+   ll ans = 0;
+   //for(auto elem : ones) cout << elem << " "; cout << endl;
+   for(int i = 0; i + 1 < n1; i++)
+   {
+      int cnt = ones[i + 1] - ones[i] - 1;
+      int rem = max(0 , cnt - (k * 2));
+      ans += (rem + k) / (k + 1);
+   }
+   cout << ans << endl;
+}
+void solve1324B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   map<int, int> cnt;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      cnt[a[i]]++;
+   }
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(a[i] == a[i + 1] && cnt[a[i]] == 2) cnt[a[i]]--;
+   }
+  /* for(auto elem : cnt)
+   {
+      cout << "("<<elem.first <<" "<<elem.second << ") ";
+   }
+   cout << endl;*/
+   for(auto elem : cnt)
+   {
+      if(elem.second > 1)
+      {
+         cout << "YES" << endl;
+         return;
+      }
+   }
+   cout << "NO" << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
