@@ -3808,6 +3808,114 @@ void solve1324B()
    }
    cout << "NO" << endl;
 }
+void solve1714D()
+{
+   string text;
+   cin >> text;
+   int n;
+   cin >> n;
+   vector<string> a(n);
+   
+   for(int i = 0; i < n; i++) 
+   {
+      string s;
+      cin >> s;
+      a[i] = s;
+   }
+   
+   vector<pair<int, int>> ans;
+   int p = text.size(), moves = 0, start = 0, end = 0;
+   int maxi = -1;
+   
+   for(int i = 0; i < n; i++)
+   {
+      int curr = 0;
+      int k = 0;
+      for(; k < a[i].size(); k++)
+      {
+         if(curr < p && text[curr] == a[i][k]) curr++;
+         else break;
+      }
+      if(k == a[i].size())
+      {
+         if(k > end)
+         {
+            end = k;
+            maxi = i;
+         }
+      }
+   }
+   if(maxi != -1) 
+   {
+      moves++; 
+      ans.push_back({maxi, 0});
+      
+   }
+   else {cout << -1 << endl; return;}
+   start++;
+   while(end < p)
+   {
+      //cout << "end < p " << end << endl;
+      int maxforall = -1, currstr = -1, curridx = -1;
+      for(; start <= min(end, p - 1); start++)
+      {
+         //cout << start << " " << end << endl;
+         maxi = -1; 
+         int currstr2 = -1, curridx2 = -1;
+         for(int i = 0; i < n; i++)
+         {
+            int k = 0;
+            int newend = start;
+            for(; k < a[i].size(); k++)
+            {
+               if(newend < p && text[newend] == a[i][k]) newend++;
+               else break;
+            }
+            //cout << newend << endl;
+            if(k == a[i].size())
+            {
+               //cout << "matched string for "<< text[start] <<" " << a[i] << endl;
+               //cout << "for this my newend " << newend <<" and end " << end << endl;
+               if(newend > end)
+               {
+                  //maxi = max(maxi, newend);
+                  if(newend > maxi)
+                  {
+                     maxi = newend;
+                     currstr2 = i;
+                     curridx2 = start;
+                  }
+               }
+            }
+         }
+         if(maxforall < maxi)
+         {
+            maxforall = maxi;
+            currstr = currstr2;
+            curridx = curridx2;
+         }
+         //cout << "maxi " << maxi << " currstr2 " <<currstr2<<" curridx2 " << curridx2 << endl;
+         //cout << "maxFA " << maxforall << " currstr " <<currstr<<" curridx " << curridx << endl;
+      }
+      if(maxforall != -1)
+      {
+         moves++;
+         //cout << "push back " << curridx <<": curridx currstr: " << currstr <<endl;
+         //cout << a[currstr] << " " << curridx << endl;
+         ans.push_back({currstr, curridx});
+         end = maxforall;
+      }
+      else
+      {
+         cout << -1 << endl;
+         return;
+      }
+   }
+   
+   cout << moves << endl;
+   for(auto elem : ans) cout << elem.first + 1 << " " << elem.second + 1 << endl;
+   
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
