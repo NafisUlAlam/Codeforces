@@ -3916,6 +3916,181 @@ void solve1714D()
    for(auto elem : ans) cout << elem.first + 1 << " " << elem.second + 1 << endl;
    
 }
+void solve1401C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   vector<int> b(a);
+   sort(b.begin(), b.end());
+   int mini = b[0];
+   
+   for(int i = 0; i < n; i++)
+   {
+      if((a[i] == b[i]) || ((a[i] % mini) == 0)) continue;
+      else
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve600B()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<int> a(n), b(m);
+   for(auto & e : a) cin >> e;
+   for(auto & e : b) cin >> e;
+   sort(a.begin(), a.end());
+   for(int i = 0; i < m; i++)
+   {
+      int x = upper_bound(a.begin(), a.end(), b[i]) - a.begin();
+      cout << x << " ";
+   }
+   cout << endl;
+}
+
+void solve1712B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1);
+   for(int i = 1; i <= n; i++) a[i] = i;
+   for(int i = n; i - 1 >= 1; i = i - 2)
+   {
+      swap(a[i], a[i - 1]);
+   }
+   
+   for(int i = 1; i <= n; i++)
+   {
+      cout << a[i] << " ";
+   }
+   cout << endl;
+}
+
+void solve1712A()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n + 1);
+   //int sum1 = 0, sum2 = (k * (k + 1)) / 2;
+   int moves = 0;
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      if(i <= k && a[i] > k) moves++;
+   }
+   cout << moves << endl;
+}
+
+solve1712C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1), cnt(n + 1, 0);
+   vector<pair<int, int>> b(n + 1, {-1, -1});
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      a[i] = x;
+      cnt[a[i]]++;
+      if(b[a[i]].first == -1)  b[a[i]].first = i;
+      b[a[i]].second = i;
+   }
+   
+   //for(auto elem : b) cout <<"(" << elem.first << " " << elem.second <<")"; cout << endl
+   int left = n, right = n;
+   for(int i = n; i - 1 >= 1; i--)
+   {
+      if(a[i] >= a[i - 1])
+      {
+         left = i - 1;
+         continue;
+      }
+      else
+      {
+         left = i;
+         break;
+      }
+   }
+   //if(left == n) left = 1;
+   
+   int marked = -1;
+   for(int i = left; i <= right; i++)
+   {
+      if(b[a[i]].first < left)
+      {
+         marked = i;
+      }
+   }
+   int moves = 0;
+   cout << left << " " << right << " " << marked << endl;
+   if(marked == -1) marked = left - 1;
+   
+   for(int i = 1; i <= marked; i++)
+   {
+      if(cnt[a[i]] > 0) 
+      {
+         moves++;
+         cnt[a[i]] = 0;
+      }
+   }
+   cout << moves << endl;
+   
+}
+
+void solve1454C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   vector<vector<pair<int, int>>> b(n + 1);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   
+   for(int i = 0; i < n; i++)
+   {
+      int curr = a[i];
+      int start = i;
+      int end = i;
+      int j = i;
+      while(j < n && curr == a[j])
+      {
+         j++;
+      }
+      end = j - 1;
+      b[curr].push_back({start, end});
+      i = j - 1;
+   }
+   for(int i = 0; i <= n; i++)
+   {
+      //cout << i << " ";
+      for(int j = 0; j < b[i].size(); j++)
+      {
+         //cout << "(" << b[i][j].first << " " << b[i][j].second << ")";
+      }
+      //cout << endl;
+   }
+   
+   vector<int> cnt(n + 1, 0);
+   for(int i = 1; i <= n; i++)
+   {
+      cnt[i] = (b[i].size() > 0 ? b[i].size() : INT_MAX);
+      if(b[i].size() > 0 && b[i][0].first == 0) cnt[i]--;
+      if(b[i].size() > 0 && b[i][b[i].size() - 1].second == n - 1) cnt[i]--;
+   }
+   int mini = INT_MAX;
+   for(int i = 1; i <= n; i++)
+   {
+      mini = min(mini, cnt[i]);
+      //cout << cnt[i] << " ";
+   }
+   cout << mini + 1 <<  endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
