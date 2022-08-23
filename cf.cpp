@@ -4091,6 +4091,426 @@ void solve1454C()
    }
    cout << mini + 1 <<  endl;
 }
+void solve349A()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto & e : a) cin >> e;
+   
+   int curr25 = 0, curr50 = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] == 25) curr25++;
+      else if(a[i] == 50)
+      {
+         if(curr25 > 0)
+         {
+            curr25--;
+            curr50++;
+         }
+         else
+         {
+            cout << "NO" << endl;
+            return;
+         }
+      }
+      else
+      {
+         if(curr50 > 0)
+         {
+            curr50--;
+            if(curr25 > 0)
+            {
+               curr25--;
+            }
+            else
+            {
+               cout << "NO" << endl;
+               return;
+            }
+         }
+         else
+         {
+            if(curr25 >= 3)
+            {
+               curr25 -= 3;
+            }
+            else
+            {
+               cout << "NO" << endl;
+               return;
+            }
+         }
+      }
+      //cout << curr25 << " hey " << curr50 << endl;
+   }
+   cout << "YES" << endl;
+}
+
+void solve1420B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto & e : a) cin >> e;
+   sort(a.begin(), a.end());
+   
+   int left = 1, right = 1;
+   ll ans = 0;
+   for(int i = 0; i <= 30; i++)
+   {
+      if(i > 0)
+      {
+         left = left * 2;
+         right = right * 2 + 1;
+      }
+      int lbound = lower_bound(a.begin(), a.end(), left) - a.begin();
+      int rbound = upper_bound(a.begin(), a.end(), right) - a.begin();
+      int total = rbound - lbound;
+      ans += (total * (total - 1)) / 2;
+   }
+   cout << ans << endl;
+}
+
+void solve1719B()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a, b;
+   for(int i = 1; i <= n; i++)
+   {
+      if(i % 4 == 0) a.push_back(i);
+      else
+      {
+         if((i + k) % 4 == 0) a.push_back(i);
+         else b.push_back(i);
+      }
+   }
+   if(k == 0 || k % 4 == 0)
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   
+   if(a.size() != b.size())
+   {
+      cout << "YES" << endl;
+      if(a.size() > b.size())
+      {
+         cout << a[0] << " " << a[1] << endl;
+         for(int i = 0; i < a.size(); i++)
+         {
+            if(i % 2 == 0)
+            {
+               cout << a[i + 2] << " " << b[i] << endl;
+            }
+            else  cout << b[i] << " " << a[i + 2] << endl;
+         }
+      }
+      else 
+      {
+         cout << b[0] << " " << b[1] << endl;
+         for(int i = 0; i < a.size(); i++)
+         {
+            if(i % 2 == 0)
+            {
+               cout << a[i] << " " << b[i + 2] << endl;
+            }
+            else  cout << b[i + 2] << " " << a[i] << endl;
+         }
+      }
+   }
+   else
+   {
+      cout << "YES" << endl;
+      for(int i = 0; i < a.size(); i++)
+      {
+         if(i % 2 == 0)
+         {
+            cout << a[i] << " " << b[i] << endl;
+         }
+         else  cout << b[i] << " " << a[i] << endl;
+      }
+   }
+}
+
+void solve1334B()
+{
+   ll n, x;
+   cin >> n >> x;
+   vector<ll> a(n), pref(n);
+   for(auto & e : a) cin >> e;
+   sort(a.begin(), a.end(), greater<ll> ());
+   ll sum = 0, ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      sum += a[i];
+      if(sum / (i + 1) >= x) ans++;
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   cout << ans << endl;
+}
+
+void solve1719C()
+{
+   int n, q;
+   cin >> n >> q;
+   list<pair<int, int>> a;
+   vector<vector<int>> b(n + 1);
+   int maxi = 0;
+   for(int id = 1; id <= n; id++)
+   {
+      int strength;
+      cin >> strength;
+      if(strength == n) maxi = id;
+      a.push_back({strength, id});
+   }
+   //for(auto elem : a) cout << "("  << elem.first << " " << elem.second <<")"; cout << endl;
+   for(int i = 1; i <= n; i++)
+   {
+      auto it1 = a.begin();
+      auto it2 = a.begin();
+      advance(it2, 1);
+      //cout << (*it1).first << " " << (*it2).first <<  endl;
+      
+      int strength1 = (*it1).first;
+      int id1 = (*it1).second;
+      
+      int strength2 = (*it2).first;
+      int id2 = (*it2).second;
+      if(strength1 > strength2)
+      {
+         b[id1].push_back(i);
+         a.push_back({strength2, id2});
+         a.erase(it2);
+      }
+      else if(strength1 < strength2)
+      {
+         b[id2].push_back(i);
+         a.push_back({strength1, id1});
+         a.erase(it1);
+      }
+      //for(auto elem : a) cout << elem.first << " "; cout << endl;
+   }
+   
+   /*for(int i = 1; i <= n; i++)
+   {
+      cout << "id " << i << " rounds ";
+      for(int j = 0; j < b[i].size(); j++) cout << b[i][j] << " "; cout << endl;
+   }*/
+   while(q--)
+   {
+      int i, k;
+      cin >> i >> k;
+      int t = upper_bound(b[i].begin(), b[i].end(), k) - b[i].begin();
+      //cout << t << endl;
+      if(i != maxi) cout << t << endl;
+      else
+      {
+         if(k <= b[maxi].back()) cout << t << endl;
+         else cout << k - b[maxi][0] + 1 << endl;
+      }
+   }
+}
+
+void solve1345B()
+{
+   ll n;
+   cin >> n;
+   ll cnt = 0;
+   while(n >= 2)
+   { 
+      ll low = 0, high = 100000, ans = -1;
+      while(low <= high)
+      {
+         ll mid = (low + high) / 2;
+         if( (3 * 1ll * mid * mid + 7 * mid + 4) <= (2 * 1ll * n) )
+         {
+            ans = mid;
+            low = mid + 1;
+         }
+         else if( (3 * 1ll * mid * mid + 7 * mid + 4) > (2 * 1ll * n) )
+         {
+            high = mid - 1;
+         }
+      }
+      //cout << "ans " << ans << endl;
+      cnt++;
+      ll need = ((3 * 1ll * ans * ans + 7 * ans + 4)) / 2;
+      n -= need;
+      //cout << n << endl;
+   }
+   cout << cnt << endl;
+}
+
+
+void solve1715B()
+{
+   ll n, k, b, s;
+   cin >> n >> k >> b >> s;
+   
+   ll mini = b * 1ll * k;
+   ll maxi = mini + (k - 1) + ((n - 1) * (k - 1));
+   if(s < mini || s > maxi)
+   {
+      cout << -1 << endl;
+      return;
+   }
+   
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++)
+   {
+      ll low = b * 1ll * k;
+      ll high = b * 1ll * k + (k - 1);
+      ll ans = -1;
+      
+      while(low <= high)
+      {
+         ll mid = (low + high + 0ll) / 2;
+         if(s - mid >= 0)
+         {
+            ans = mid;
+            low = mid + 1;
+         }
+         else
+         {
+            high = mid - 1;
+         }
+      }
+      //cout << ans << " ";
+      a[i] = ans;
+      s -= ans;
+      b = 0;
+   }
+   
+   for(auto elem : a) cout << elem << " "; cout << endl;
+}
+
+void solve1715A()
+{
+   int n, m;
+   cin >> n >> m;
+   int moves = 0;
+   
+   if(n == 1 && m == 1)
+   {
+      cout << moves << endl;
+      return;
+   }
+   else if(m == 1)
+   {
+      cout << n << endl;
+      return;
+   }
+   else if (n == 1)
+   {
+      cout << m << endl;
+      return;
+   }
+   else
+   {
+      int maxi = max(n, m);
+      int mini = min(n, m);
+      cout << maxi - 1 + mini - 1 + mini << endl;;
+   }
+   
+}
+
+void solve1713C()
+{
+   int n; 
+   cin >> n;
+   vector<int> a(1001), ans(n);
+   for(int i = 0;  i < a.size(); i++) a[i] = i * i;
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   //int tofind = upper_bound(a.begin(), a.end(), 2 * (n - 1)) - a.begin();
+   //tofind--;
+   
+   for(int i = n - 1; i >= 0; i--)
+   {
+      int tofind = upper_bound(a.begin(), a.end(), 2 * i) - a.begin();
+      tofind--;
+      int st = i;
+      int en = a[tofind] - st;
+      int toput = en;
+      
+      for(int j = st; j >= en; j--) 
+      {
+         ans[j] = toput++;
+      }
+      
+      i = en;
+   }
+   for(auto elem : ans) cout << elem << " "; cout << endl;
+}
+
+void solve1433D()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   vector<pair<int, int>> ans;
+   unordered_map<int, vector<int>> mp;
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      mp[a[i]].push_back(i + 1);
+   }
+   
+   /*for(auto elem : mp)
+   {
+      cout << elem.first << " ";
+      for(auto e : elem.second)
+      {
+         cout << e << " ";
+      }
+      cout << endl;
+   }*/
+   
+   if(mp.size() <= 1) 
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   
+   unordered_map<int, vector<int>> :: iterator it;
+   it = mp.begin();
+   
+   vector<int> :: iterator it2 = it->second.begin();
+   
+   int ff = *it2;
+   it++;
+   
+   for(; it != mp.end(); it++)
+   {
+      for(it2 = it->second.begin(); it2 != it->second.end(); it2++)
+      {
+         int ss = *it2;
+         ans.push_back({ff, ss});
+      }
+   }
+   
+   it = mp.begin();
+   it++;
+   it2 = it->second.begin();
+   
+   ff = *it2;
+   
+   it = mp.begin();
+   it2 = it->second.end();
+   --it2;
+   for(; it2 > it->second.begin(); --it2)
+   {
+      int ss = *it2;
+      ans.push_back({ff, ss});
+   }
+   
+   cout << "YES" << endl;
+   for(auto elem : ans) cout << elem.first << " " << elem.second << endl;   
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
