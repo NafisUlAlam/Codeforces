@@ -4511,6 +4511,513 @@ void solve1433D()
    for(auto elem : ans) cout << elem.first << " " << elem.second << endl;   
 }
 
+void solve478A()
+{
+   int sum = 0;
+   for(int i = 0; i < 5; i++)
+   {
+      int x;
+      cin >> x;
+      sum += x;
+   }
+   
+   int fd = sum / 5;
+   int cd = (sum + 4) / 5;
+   if(fd > 0 && fd == cd) cout << fd << endl;
+   else cout << -1 << endl;
+}
+
+void solve1365A()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<bool> row(n, false), col(m, false);
+   int t = n + m, cr = n, cc = m;
+   for(int i = 0; i < n; i++)
+   {
+      for(int j = 0; j < m; j++)
+      {
+         int x;
+         cin >> x;
+         if(x == 1) 
+         {
+            if(row[i] == false && col[j] == false)
+            {
+               cr--; cc--;
+               row[i] = true;
+               col[j] = true;
+            }
+            else if(col[j] == true && row[i] == false)
+            {
+               cr--;
+               row[i] = true;
+            }
+            else if(row[i] == true && col[j] == false)
+            {
+               cc--;
+               col[j] = true;
+            }
+         }
+      }
+   }
+   
+   int moves = min(cc, cr);
+   if(moves % 2 == 1) cout << "Ashish" << endl;
+   else cout << "Vivek" << endl;
+}
+
+void solve1497C1()
+{
+   int n, k;
+   cin >> n >> k;
+   int ans1, ans2, ans3;
+   if(n % 3 == 0)
+   {
+      ans1 = n / 3;
+      ans2 = ans3 = ans1;
+      //cout << ans1 << " " << ans1 << " " << ans1 << endl;
+      //return;
+   }
+   else if (n % 3 == 1)
+   {
+      if(n % 2 == 1)
+      {
+         ans1 = 1;
+         ans2 = (n - 1) / 2;
+         ans3 = (n - 1) / 2;
+      }
+      else if(n % 2 == 0)
+      {
+         int divi = n / 2;
+         int rem = n - divi;
+         if(rem % 2 == 0)
+         {
+            ans1 = divi;
+            ans2 = rem / 2;
+            ans3 = rem / 2;
+         }
+         else if(rem % 2 == 1)
+         {
+            ans1 = 2;
+            ans2 = divi - 1;
+            ans3 = divi - 1;
+         }
+      }
+   }
+   else if(n % 3 == 2)
+   {
+      if(n % 2 == 1)
+      {
+         ans1 = 1;
+         ans2 = (n - 1) / 2;
+         ans3 = (n - 1) / 2;
+      }
+      else if(n % 2 == 0)
+      {
+         int divi = n / 2;
+         int rem = n - (n / 2);
+         if(rem % 2 == 0)
+         {
+            ans1 = divi;
+            ans2 = rem / 2;
+            ans3 = rem / 2;
+         }
+         else if (rem % 2 == 1)
+         {
+            ans1 = 2;
+            ans2 = divi - 1;
+            ans3 = divi - 1;
+         }
+      }
+   }
+   cout << ans1 << " " << ans2 << " " << ans3 << endl;
+}
+
+void solve4B()
+{
+   int d, sum, minisum = 0, maxisum = 0;
+   cin >> d >> sum;
+   vector<pair<int, int>> a(d);
+   for(int i = 0; i < d; i++)
+   {
+      int x, y;
+      cin >> x >> y;
+      minisum += x;
+      maxisum += y;
+      a[i] = {x, y};
+   }
+   if(sum < minisum || sum > maxisum)
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   cout << "YES" << endl;
+   int diff;
+   if(sum - minisum < maxisum - sum)
+   {
+      diff = sum - minisum;
+      for(int i = 0; i < d; i++)
+      {
+         if(diff == 0) break;
+         int take = min(a[i].second - a[i].first, diff);
+         a[i].first += take;
+         diff -= take;
+      }
+      
+      for(auto elem : a) cout << elem.first <<" "; cout << endl;
+   }
+   
+   else
+   {
+      diff = maxisum - sum;
+      for(int i = 0; i < d; i++)
+      {
+         if(diff == 0) break;
+         int take = min(a[i].second - a[i].first, diff);
+         a[i].second -= take;
+         diff -= take;
+      }
+      
+      for(auto elem : a) cout << elem.second <<" "; cout << endl;
+   }
+}
+
+void solve1721A()
+{
+   string s1, s2;
+   cin >> s1;
+   cin >> s2;
+   map<char, int> mp;
+   for(int i = 0; i < 2; i++)
+   {
+      mp[s1[i]]++;
+      mp[s2[i]]++;
+   }
+   
+   int cnt = 0;
+   for(auto elem : mp)
+   {
+      if(elem.second == 1) cnt++;
+   }
+   
+   cout << mp.size() - 1 << endl;
+}
+
+void solve1721B()
+{
+   int n, m, x, y, d;
+   cin >> n >> m >> x >> y >> d;
+   int top = max(x - d, 1);
+   int bot = min(x + d, n);
+   int left = max(y - d, 1);
+   int right = min(y + d, m);
+   
+   if(top == 1 && bot == n || left == 1 && right == m || bot == n && right == m || top == 1 && left == 1)
+   {
+      cout << -1 << endl;
+      return;
+   }
+   cout << n + m - 2 << endl;
+   
+}
+
+
+void solve1206B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   ll sum = 0, cntp = 0, cntn = 0, cntz = 0;
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      if(x < 0) 
+      {
+         sum += -1 - x;
+         a[i] = -1;
+         cntn++;
+      }
+      else if(x > 0)
+      {
+         sum += x - 1;
+         a[i] = 1;
+         cntp++;
+      }
+      else cntz++;
+   }
+   
+   if(n % 2 == 0)
+   {
+      if(cntz == 0)
+      {
+         if(cntn % 2 == 1) sum += 2;
+      }
+      else
+      {
+         sum += cntz;
+      }
+   }
+   else 
+   {
+      if(cntz == 0)
+      {
+         if(cntn % 2 == 1) sum += 2;
+      }
+      else
+      {
+         sum += cntz;
+      }
+   }
+   cout << sum << endl;
+}
+
+void solve1721C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), b(n), dmx(n);
+   for(auto & e : a) cin >> e;
+   for(auto & e : b) cin >> e;
+   
+   int j = 0;
+   for(int i = 0; i < n; i++)
+   {
+      while(b[j] < a[i]) j++;
+      cout << b[j] - a[i] <<" ";
+   }
+   
+   int curr = n - 1;
+   for(int i = n - 1; i >= 0; i--)
+   {
+      if(i == n - 1) {dmx[i] = b[i] - a[i]; continue;}
+      
+      if(b[i] >= a[i + 1])
+      {
+         dmx[i] = b[curr] - a[i];
+      }
+      else
+      {
+         dmx[i] = b[i] - a[i];
+         curr = i;
+      }
+   }
+   cout << endl;
+   for(auto elem : dmx) cout << elem << " "; cout << endl;
+}
+
+
+void solve1722C()
+{
+   int n;
+   cin >> n;
+   map<string, int> mp;
+   vector<vector<string>> a(3, vector<string>(n));
+   for(int i = 0; i <= 2; i++)
+   {
+      for(int j = 0; j < n; j++)
+      {
+         string s;
+         cin >> s;
+         a[i][j] = s;
+         mp[s]++;
+         
+      }
+   }
+   
+   for(int i = 0; i < 3; i++)
+   {
+      ll points = 0;
+      for(int j = 0; j < n; j++)
+      {
+         if(mp[a[i][j]] == 1) points += 3;
+         else if (mp[a[i][j]] == 2) points += 1;
+      }
+      cout << points << " ";
+      
+   }
+   cout << endl;
+}
+
+
+
+void solve1722B()
+{
+   int n;
+   cin >> n;
+   string s1, s2;
+   cin >> s1;
+   cin >> s2;
+   
+   for(int i = 0; i < n; i++)
+   {
+      if(s1[i] == 'G') s1[i] = 'B';
+      if(s2[i] == 'G') s2[i] = 'B';
+   }
+   
+   for(int i = 0; i < n; i++)
+   {
+      if(s1[i] != s2[i])
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve1722A()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   //cout << n << s << endl;
+   
+   if(n != 5)
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   
+   map<char, int> mp; 
+   int cnt = 0;
+   string s1 = "Timur";
+   for(int i = 0; i < s1.size(); i++)
+   {
+      mp[s1[i]]++;
+      if(mp[s1[i]] == 1) cnt++;
+   }
+   
+   
+   for(int i = 0; i < n; i++)
+   {
+      mp[s[i]]--;
+      if(mp[s[i]] == 0) cnt--;
+   }
+   
+   if(cnt == 0) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1722D()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   
+   ll sum = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == 'L') sum += i;
+      else sum += n - i - 1;
+   }
+   
+   vector<int> l, r;
+   for(int i = 0; i < n / 2; i++)
+   {
+      if(s[i] == 'L') l.push_back(i);
+   }
+   
+   for(int i = n - 1; i >= (n - (n / 2)); i--)
+   {
+      if(s[i] == 'R') r.push_back(i);
+   }
+   
+   //for(auto elem : l) cout << elem << " "; cout << endl;
+   //for(auto elem : r) cout << elem << " "; cout << endl;
+   //cout << sum << endl;
+   int i = 0, j = 0;
+   
+   int ls = l.size(), rs = r.size();
+   
+   int k = 0;
+   
+   while(i < ls && j < rs)
+   {
+      int x = l[i];
+      int y = r[j];
+      
+      if(x <= n - 1 - y)
+      {
+         //choosing i
+         sum -= x;
+         sum += n - 1 - x;
+         i++;
+         cout << sum << " ";
+         k++;
+      }
+      
+      else
+      {
+         //choosing j
+         sum -= n - 1 - y;
+         sum += y;
+         j++;
+         cout << sum << " ";
+         k++;
+      }
+   }
+   
+   while(i < ls)
+   {
+      int x = l[i];   
+      sum -= x;
+      sum += n - 1 - x;
+      i++;
+      cout << sum << " ";
+      k++;
+   }
+   
+   while(j < rs)
+   {
+      int y = r[j];   
+      sum -= n - 1 - y;
+      sum += y;
+      j++;
+      cout << sum << " ";
+      k++;
+   }
+
+   while(k < n) {cout << sum << " "; k++;}
+   cout << endl;
+}
+
+void solve285C()
+{
+   int n;
+   cin >> n;
+   set<int> us;
+   multiset<int> a;
+   for(int i = 1; i <= n; i++) us.insert(i);
+   ll moves = 0;
+   
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      if(us.find(x) != us.end()) us.erase(x);
+      else a.insert(x);
+   }
+   
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   //for(auto elem : us) cout << elem << " "; cout << endl;
+   
+   multiset<int> :: iterator it1;
+   set<int> :: iterator it2;
+   it1 = a.begin();
+   it2 = us.begin();
+   
+   while(it1 != a.end() && it2 != us.end())
+   {
+      moves += abs(*it1 - *it2);
+      it1++;
+      it2++;
+   }
+   
+   cout << moves << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
