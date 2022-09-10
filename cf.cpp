@@ -222,6 +222,57 @@ void primefact(int n)
     if(n > 1) cout << n << " ^ " << 1 << endl;
 }
 
+void generateUniquePermutations(set<vector<int>>& ans, vector<int>& perm, int n, vector<int>& a)
+{
+    
+   if(perm.size() == n)
+   {
+       vector<int> temp;
+       for(int i = 0; i < n; i++)
+       {
+           temp.push_back(a[perm[i]]);
+       }
+       ans.insert(temp);
+       return;
+   }
+   
+   for(int i = 0; i < n; i++)
+   {
+       if(find(perm.begin(), perm.end(), i) == perm.end())
+       {
+           perm.push_back(i);
+           generateUniquePermutations(ans, perm, n, a);
+           perm.pop_back();
+       }
+       else continue;
+   }
+}
+void generatePermutations(vector<vector<int>>& ans, vector<int>& perm, int n, vector<int>& a)
+{
+    
+   if(perm.size() == n)
+   {
+       vector<int> temp;
+       for(int i = 0; i < n; i++)
+       {
+           temp.push_back(a[perm[i]]);
+       }
+       ans.push_back(temp);
+       return;
+   }
+   
+   for(int i = 0; i < n; i++)
+   {
+       if(find(perm.begin(), perm.end(), i) == perm.end())
+       {
+           perm.push_back(i);
+           generatePermutations(ans, perm, n, a);
+           perm.pop_back();
+       }
+       else continue;
+   }
+}
+
 
 void eulertotientfunction(int n)
 {
