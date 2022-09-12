@@ -5280,6 +5280,183 @@ void solve1726C()
    cout << ans << endl;
 }
 
+void solve1006C()
+{
+   ll n;
+   cin >> n;
+   vector<ll> pref(n), suff(n);
+   for(int i = 0; i < n; i++)
+   {
+      ll x;
+      cin >> x;
+      pref[i] = x;
+      suff[i] = x;
+   }
+   
+   for(ll i = 1; i < n; i++) pref[i] += pref[i - 1];
+   for(ll i = n - 2; i >= 0; i--) suff[i] += suff[i + 1];
+   
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   //for(auto elem : suff) cout << elem << " "; cout << endl;
+   ll l = 0, r = n - 1, ans = 0;
+   
+   while(l < r)
+   {
+      if(pref[l] == suff[r])
+      {
+         ans = pref[l];
+         l++;
+         r--;
+      }
+      else if(pref[l] > suff[r])
+      {
+         r--;
+      }
+      else l++;
+      
+   }
+   cout << ans << endl;
+}
+
+void solve1728B()
+{
+   int n;
+   cin >> n;
+  
+   
+   if(n % 2 == 0)
+   {
+      for(int i = n - 2; i >= 1; i--) cout << i << " ";
+      cout << n - 1 << " " << n << endl;
+      
+   }
+   else
+   {
+      for(int i = 1; i <= n; i++)
+      {
+         if(i == 1 || i >= n - 1) cout << i << " ";
+         else if(i % 2 == 0) cout << i + 1 << " ";
+         else if(i % 2 == 1) cout << i - 1 << " ";
+      }
+      cout << endl;
+   }
+   
+}
+
+void solve6C()
+{
+   int n;
+   cin >> n;
+   vector<int> pref(n), suff(n);
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      pref[i] = suff[i] = x;
+   }
+   for(int i = 1; i < n; i++) pref[i] += pref[i - 1];
+   for(int i = n - 2; i >= 0; i--) suff[i] += suff[i + 1];
+   
+   int diff = INT_MAX, mark = -1;
+   for(int i = 0; i < n; i++)
+   {
+      if(abs(pref[i] - suff[i]) < diff)
+      {
+         diff = abs(pref[i] - suff[i]);
+         mark = i;
+      }
+   }
+   int alice , bob;
+   if(pref[mark] <= suff[mark]) {alice = mark + 1; bob = n - mark - 1;}
+   else {alice = mark; bob = n - mark;}
+   
+   cout << alice << " " << bob << endl;
+}
+
+
+void solve1729A()
+{
+   int a, b, c;
+   cin >> a >> b >> c;
+   int ss = abs(b - c) + abs(c - 1);
+   int ff = a - 1;
+   if(ss == ff) cout << 3 << endl;
+   else if(ff < ss) cout << 1 << endl;
+   else cout << 2 << endl;
+}
+
+void solve1729B()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   unordered_map<int, char>mp;
+   for(int i = 1; i <= 26; i++) mp[i] = 'a' + i - 1;
+   //for(auto elem : mp) cout << "(" <<elem.first << " " << elem.second<<")"; cout << endl;
+   
+   int n1 = s.size();
+   string output;
+   for(int i = n1 - 1; i >= 0; i--)
+   {
+      if(s[i] == '0')
+      {
+         string curr;
+         curr.push_back(s[i - 2]);
+         curr.push_back(s[i - 1]);
+         int cu = stoi(curr);
+         output += mp[cu];
+         i -= 2;
+      }
+      else
+      {
+         string curr;
+         curr.push_back(s[i]);
+         int cu = stoi(curr);
+         output += mp[cu];
+      }
+   }
+   reverse(output.begin(), output.end());
+   cout << output << endl;
+}
+
+void solve1729C()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   int jumps = abs(s[0] - s[n - 1]);
+   
+   vector<vector<int>> ans(26);
+   for(int i = 0; i < n; i++)
+   {
+      ans[s[i] - 'a'].push_back(i);
+   }
+   vector<char> a;
+   a.push_back(s[0]);
+   a.push_back(s[n - 1]);
+   sort(a.begin(), a.end());
+   vector<int> ans2;
+   int st = s[0] - 'a';
+   int en = s[n - 1] - 'a';
+   if(st > en)
+   {
+      for(int i = st; i >= en; i--)
+      {
+         for(auto elem : ans[i]) ans2.push_back(elem + 1);
+      }
+   }
+   else
+   {
+      for(int i = st; i <= en; i++)
+      {
+         for(auto elem : ans[i]) ans2.push_back(elem + 1);
+      }
+   }
+   cout << jumps << " " << ans2.size() << endl;
+   for(auto elem : ans2) cout << elem << " "; cout << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
