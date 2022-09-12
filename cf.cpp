@@ -5457,6 +5457,37 @@ void solve1729C()
    for(auto elem : ans2) cout << elem << " "; cout << endl;
 }
 
+void solve1539C()
+{
+   ll n, k, x;
+   cin >> n >> k >> x;
+   vector<ll> a(n);
+   for(auto &e : a) cin >> e;
+   sort(a.begin(), a.end());
+   
+   vector<ll> diff(n - 1);
+   for(int i = 0; i < n - 1; i++) diff[i] = a[i + 1] - a[i];
+   sort(diff.begin(), diff.end());
+   
+   ll ans = 0;
+   for(int i = 0; i < n - 1; i++)
+   {
+      if(diff[i] <= x) continue;
+      else
+      {
+         ll need = (diff[i]  - 1)/ x;
+         //cout << "NEED " << need << endl;
+         if(k >= need)
+         {
+            k -= need;
+         }
+         else ans++;
+      }
+   }
+   cout << ans + 1 << endl;
+}
+
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
