@@ -5487,6 +5487,355 @@ void solve1539C()
    cout << ans + 1 << endl;
 }
 
+void solve1327B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1);
+   vector<bool> b(n + 1, false);
+   int mark = -1, mark2 = -1;
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      bool found = false;
+      for(int j = 1; j <= x; j++)
+      {
+         int y;
+         cin >> y;
+         if(found == false)
+         {
+            if(b[y] == false)
+            {
+               b[y] = true;
+               found = true;
+            }
+         }
+         else continue;
+      }
+      if(found == false)
+      {
+         mark = i;
+      }
+   }
+   
+   for(int i = 1; i <= n; i++) 
+   {
+      if(b[i] == false) mark2 = i;
+   }
+   if(mark == -1)
+   {
+      cout << "OPTIMAL" << endl;
+   }
+   else 
+   {
+      cout << "IMPROVE" << endl;
+      cout << mark << " " << mark2 << endl;
+   }
+}
+
+void solve1256A()
+{
+   ll a, b, n, s;
+   cin >> a >> b >> n >> s;
+   if((a * 1ll * n + b) < s) cout << "NO" << endl;
+   else if((a * 1ll * n + b) == s) cout << "YES" << endl;
+   else
+   {
+      ll diff = (a * 1ll * n + b) - s;
+      if(b >= diff) cout << "YES" << endl;
+      else
+      {
+         ll divi = min(diff / n, a);
+         ll rem = min(diff - (divi * n), b) ;
+         if((divi * 1ll * n + rem) == diff) cout << "YES" << endl;
+         else cout << "NO" << endl;
+      }
+   }
+}
+
+void solve1476A()
+{
+   int n, k;
+   cin >> n >> k;
+   if(n <= k)
+   {
+      int divi = k / n;
+      int rem = k % n;
+      if(rem == 0) cout << divi << endl;
+      else cout << divi + 1 << endl;
+   }
+   else
+   {
+      int rem = n % k;
+      if(rem == 0) cout << 1 << endl;
+      else cout << 2 << endl;
+   }
+}
+
+void solve1520C()
+{
+   int n;
+   cin >> n;
+   if(n == 2) {cout << - 1 << endl; return;}
+   vector<vector<int>> a(n, vector<int>(n));
+   a[0][n - 1] = n * n - 1;
+   a[n - 1][0] = n * n;
+   int row = 0, col = 0, put = 1;
+   while(col <= n - 2)
+   {
+      int i = row, j = col;
+      while(i <= n - 1 && j <= n - 1)
+      {
+         a[i][j] = put++;
+         i++;
+         j++;
+      }
+      col++;
+   }
+   row++, col = 0;
+   while(row <= n - 2)
+   {
+      int i = row, j = col;
+      while(i <= n - 1 && j <= n - 1) 
+      {
+         a[i][j] = put++;
+         i++;
+         j++;
+      }
+      row++;
+   }
+   
+   for(int i = 0; i < n; i++)
+   {
+      for(int j = 0; j < n; j++) cout << a[i][j] << " "; cout << endl;
+   }
+   cout << endl;
+}
+
+void solve1326A()
+{
+   int n;
+   cin >> n;
+   if(n == 1) {cout << -1 << endl; return;}
+   string s(n, '3');
+   s[0] = '2';
+   cout << s << endl;
+}
+
+void solve1473B()
+{
+   string s, t;
+   cin >> s >> t;
+   if(s.size() < t.size()) swap(s, t);
+   
+   int flag = 0;
+   if(s.find(t) != std::string::npos) flag = 1;
+   cout << flag << endl;
+}
+
+void sove1733A()
+{
+   ll n, k, sum = 0;
+   cin >> n >> k;
+   vector<ll> maxi(k, 0);
+   for(ll i = 1; i <= n; i++)
+   {
+      ll x;
+      cin >> x;
+      maxi[i % k] = max(maxi[i % k], x);
+   }
+   
+   for(auto elem : maxi) sum += elem + 0ll;
+   cout << sum << endl;
+}
+
+void solve1733B()
+{
+   int n, x, y;
+   cin >> n >> x >> y;
+   if( (x == 0 && y == 0) || (x > 0 && y > 0) )
+   {
+      cout << -1 << endl;
+      return;
+   }
+   else
+   {
+      int total_match = n - 1;
+      int k = max(x, y);
+      if(total_match % k != 0)
+      {
+         cout << -1 << endl;
+      }
+      else
+      {
+         int i = 1, p = 1;
+         bool first = false;
+         while(p <= n - 1)
+         {
+            for(int j = 1; j <= k; j++)
+            {
+               cout << i << " ";
+            }
+            
+            if(first == false) {i += k + 1; first = true;}
+            else i += k;
+            p += k;
+         }
+         cout << endl;
+      }
+   }
+}
+
+
+void solve450A()
+{
+   int n, m, maxi = INT_MIN, idx = -1;
+   cin >> n >> m;
+   vector<int> a(n);
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      if(maxi <= (x + m - 1) / m)
+      {
+         maxi = (x + m - 1) / m;
+         idx = i;
+      }
+   }
+   int ans = (idx == -1) ? n : idx;
+   cout << ans  << endl;
+}
+
+void solve1733C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   int odds = 0, evens = 0;
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      if(a[i] % 2 == 0) evens++;
+      else odds++;
+   }
+   
+   /*if(odds == n || evens == n)
+   {
+      cout << n - 1 << endl;
+      for(int i = 1; i <= n - 1; i++)
+      {
+         if(i == idx) continue;
+         else cout << i << " " << idx << endl;
+      }
+      return;
+   }*/
+   if(n == 1)
+   {
+      cout << 0 << endl;
+      return;
+   }
+   vector<pair<int, int>> ans;
+   ans.push_back({1, n});
+   bool odd = (a[0] % 2 == 1) ? true : false;
+   if(!odd)
+   {
+      for(int i = 1; i <= n - 2; i++)
+      {
+         if(a[i] % 2 == 0) ans.push_back({i + 1, n});
+         else ans.push_back({1, i + 1});
+      }
+      
+   }
+   else
+   {
+      for(int i = 1; i <= n - 2; i++)
+      {
+         if(a[i] % 2 == 0) ans.push_back({1, i + 1});
+         else ans.push_back({i + 1, n});
+      }
+   }
+   
+   cout << ans.size() << endl;
+   for(auto elem : ans) cout << elem.first << " " << elem.second << endl;
+}
+
+void solve545D()
+{
+   ll n; 
+   cin >> n;
+   vector<ll>a(n), pref(n + 1, 0);
+   for(ll i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      
+   }
+   sort(a.begin(), a.end());
+   for(ll i = 1; i <= n; i++) pref[i] = pref[i - 1] + a[i - 1];
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   ll ans = 0, mark = -1;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] >= pref[i]) ans++;
+      else {mark = i; break;}
+   }
+   
+   int searched = -1;
+   while(searched < n)
+   {
+      
+      ll curr = pref[mark];
+      ll st = 0, en = n - 1, idx = -1;
+      while(st <= en)
+      {
+         ll mid = (st + en) / 2;
+         if(a[mid] >= curr)
+         {
+            idx = mid;
+            en = mid - 1;
+         }
+         else st = mid + 1;
+      }
+      searched = st;
+      if(idx != -1)
+      {
+         ans++;
+         pref[mark + 1] = pref[mark] + a[idx];
+         mark = mark + 1;  
+      }
+      //else break;
+      
+   }
+   cout << ans << endl;
+}
+
+void solve545DEasy()
+{
+   ll n; 
+   cin >> n;
+   vector<ll>a(n);
+   for(ll i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      
+   }
+   sort(a.begin(), a.end());
+   ll currwait = 0, ans = 0;
+   for(ll i = 0; i < n; i++)
+   {
+      if(currwait <= a[i])
+      {
+         ans++;
+         currwait += a[i];
+      }
+      else continue;
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   cout << ans << endl;
+  
+}
 
 int main()
 { 
