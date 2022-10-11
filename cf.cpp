@@ -6291,6 +6291,395 @@ void solve1470A()
    cout << ans << endl;
 }
 
+void solve1324C()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   int maxi = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == 'R') continue;
+      else
+      {
+         int j = i;
+         while(j < n && s[j] == 'L') j++;
+         maxi = max(maxi, j - i);
+         i = j - 1;
+      }
+   }
+   cout << maxi + 1 << endl;
+}
+
+void solve1341B()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n + 1), b;
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   for(int i = 2; i <= n - 1; i++)
+   {
+      if(a[i] > a[i - 1] && a[i] > a[i + 1]) b.push_back(i);
+   }
+   
+   int maxi = 0, idx = 1;
+   for(int i = 1; i <= n - k + 1 ; i++)
+   {
+      int st = i;
+      int en = i + k - 1;
+      int ff = lower_bound(b.begin(), b.end(), st + 1) - b.begin();
+      int ss = upper_bound(b.begin(), b.end(), en - 1) - b.begin();
+      
+      if(ss - ff > maxi)
+      {
+         maxi = ss - ff;
+         idx = i;
+      }
+   }
+   cout << maxi + 1 << " " << idx << endl;
+}
+
+void solve1341B1()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n + 1);
+   unordered_set<int> b;
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   for(int i = 2; i <= k - 1; i++)
+   {
+      if(a[i] > a[i - 1] && a[i] > a[i + 1]) b.insert(i);
+   }
+   
+   int maxi = b.size(), idx = 1;
+   for(int i = k + 1; i <= n; i++)
+   {
+      int curr = i - 1;
+      if(a[curr] > a[curr + 1] && a[curr] > a[curr - 1]) b.insert(curr);
+      if(b.find(i - k) != b.end()) b.erase(i - k);
+      if(b.find(i - k + 1) != b.end()) b.erase(i - k + 1);
+      //cout << b.size() << endl;
+      if(maxi < b.size())
+      {
+         maxi = b.size();
+         idx = i - k + 1;
+      }
+   }
+   
+   cout << maxi + 1 << " " << idx << endl;
+  
+}
+
+void solve1735B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto & e : a) cin >> e;
+   int x = 2 * a[0] - 1, ans = 0;
+   for(int i = 1; i < n; i++)
+   {
+      if(a[i] <= x) continue;
+      int divi = a[i] / x;
+      int rem = a[i] % x;
+      if(rem == 0) divi--;
+      ans += divi;
+   }
+   cout << ans << endl;
+}
+
+void solve1738C()
+{
+   int n;
+   cin >> n;
+   int odd = 0;
+   for (int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      odd += abs(x) % 2;
+   }
+   if (odd % 4 == 0 || ((odd - 1) % 4 == 0 && n % 2 == 0) || (odd + 1) % 4 == 0)
+   {
+      cout << "Alice\n";
+   }
+   else cout << "Bob\n";
+ 
+}
+
+void solve519C()
+{
+   int n, m;
+   cin >> n >> m;
+   int smaller, bigger;
+   bigger = max(n, m);
+   smaller = min(n, m);
+   if(bigger >= 2 * smaller) 
+   {
+      cout << smaller << endl;
+      return;
+   }
+   int teams = 0;
+   teams += bigger - smaller;
+   smaller -= bigger - smaller;
+   smaller *= 2;
+   teams += (smaller / 3);
+   cout << teams << endl;
+}
+
+void solve1521B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1);
+   int mini = INT_MAX, idx = -1;
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      if(a[i] < mini)
+      {
+         mini = a[i];
+         idx = i;
+      }
+   }
+   vector<int> b(a.begin(), a.end());
+   
+   int mul = mini + 1;
+   //cout << n - 1 << endl;
+   for(int i = idx - 1; i >= 1; i--)
+   {
+      a[i] = mul;
+      mul++;
+      //if(mul % mini == 0) mul++;
+   }
+   
+   mul = mini + 1;
+   for(int i = idx + 1; i<= n; i++)
+   {
+      a[i] = mul;
+      mul++;
+      //if(mul % mini == 0) mul++;
+   }
+   
+   //for(auto elem : b) cout << elem << " "; cout << endl;
+   //for(int i = 1; i <= n; i++) cout << a[i] << " "; cout << endl;
+   
+   cout << n - 1 << endl;
+   for(int i = 1; i <= n; i++)
+   {
+      if(i == idx) continue;
+      cout << i << " " << idx << " " << a[i] << " " << a[idx] << endl;
+   }
+}
+
+void solve1366B()
+{
+   int n, x, m;
+   cin >> n >> x >> m;
+   pair<int, int> curr = {x, x};
+   for(int i = 1; i <= m; i++)
+   {
+      int l, r;
+      cin >> l >> r;
+      if(curr.first > r || curr.second < l) continue;
+      curr.first = min(curr.first, l);
+      curr.second = max(curr.second, r);
+   }
+   
+   cout << curr.second - curr.first + 1 << endl;
+}
+
+
+void solve1555C()
+{
+   int n = 2, m;
+   cin >> m;
+   vector<int> pref(m + 1, 0);
+   vector<int> suff(m + 2, 0);
+   for(int i = 1; i <= 2; i++)
+   {
+      for(int j = 1; j <= m; j++) 
+      {
+         if(i == 1) cin >> suff[j];
+         else cin >> pref[j];
+      }
+   }
+   for(int i = m - 1; i >= 1; i--) suff[i] += suff[i + 1];
+   for(int i = 2; i <= m; i++) pref[i] += pref[i - 1];
+   //for(int i = 1; i <= m; i++) cout << suff[i] << " "; cout << endl;
+   //for(int i = 1; i <= m; i++) cout << pref[i] << " "; cout << endl;
+   
+   
+   int ans = INT_MAX;
+   
+   for(int i = 1; i <= m; i++)
+   {
+      int curr = max(suff[i + 1], pref[i - 1]);
+      ans = min(ans, curr);
+   }
+   
+   cout << ans << endl;
+}
+
+void solve1736A()
+{
+   int n, cnt1 = 0, cnt2 = 0;
+   cin >> n;
+   vector<int>a(n), b(n);
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      if(a[i] == 1) cnt1++;
+   }
+   for(int i = 0; i < n; i++)
+   {
+      cin >> b[i];
+      if(b[i] == 1) cnt2++;
+   }
+   int ans = abs(cnt1 - cnt2);
+   if(cnt1 > cnt2)
+   {
+      for(int i = 0; i < n; i++)
+      {
+         if(b[i] == 0 && a[i] == 1 && cnt1 - cnt2 > 0)
+         {
+            b[i] = 1; cnt1--;
+         }
+      }
+   }
+   else if(cnt2 > cnt1)
+   {
+      for(int i = 0; i < n; i++)
+      {
+         if(a[i] == 0 && b[i] == 1 && cnt2 - cnt1 > 0)
+         {
+            a[i] = 1; cnt2--;
+         }
+      }
+   }
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] != b[i]) {ans++; break;}
+   }
+   cout << ans  << endl;
+}
+
+void solve1741A()
+{
+   string a, b;
+   cin >> a >> b;
+   int n1 = a.size(), n2 = b.size();
+   if(a[n1 - 1] == b[n2 - 1])
+   {
+      if(a[n1 - 1] == 'S')
+      {
+         if(n1 > n2)
+         {
+            cout << "<" << endl;
+            return;
+         }
+         else if (n1 < n2)
+         {
+            cout << ">" << endl;
+            return;
+         }
+         else 
+         {
+            cout << "=" << endl;
+            return;
+         }
+      }
+      else if(a[n1 - 1] == 'M')
+      {
+         cout << "=" << endl;
+         return;
+      }
+      else
+      {
+         if(n1 > n2)
+         {
+            cout << ">" << endl;
+            return;
+         }
+         else if (n1 < n2)
+         {
+            cout << "<" << endl;
+            return;
+         }
+         else 
+         {
+            cout << "=" << endl;
+            return;
+         }
+      }
+   }
+   
+   else
+   {
+      if(a[n1 - 1] == 'L') cout << ">" << endl;
+      else if(a[n1 - 1] == 'S') cout << "<" << endl;
+      else
+      {
+         if(b[n2 - 1] == 'L') cout << "<" << endl;
+         else cout << ">" << endl;
+      }
+   }
+}
+
+void solve1741B()
+{
+   int n;
+   cin >> n;
+   vector<int>a(n + 1);
+   int k = (n  + 1) / 2;
+   int p = 1;
+   for(int i = k + 1; i <= n; i++) a[i] = p++;
+   for(int i = 1; i <= k; i++) a[i] = p++;
+   
+   if(n == 3) {cout << -1 << endl; return;}
+   for(int i = 1; i <= n; i++) cout << a[i] << " "; cout << endl;
+}
+
+void solve1741C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   int sum = 0;
+   for(int i = 0; i < n; i++) {cin >> a[i]; sum += a[i];}
+   int ans = n;
+   for(int i = 2; i <= n; i++)
+   {
+      if(sum % i != 0) continue;
+      int f = sum / i;
+      int cnt = 0;
+      int j = 0;
+      int mark = -1;
+      int maxilen = INT_MIN;
+      while(j < n)
+      {
+         int currsum = 0;
+         while(j < n && currsum < f) 
+         {
+            currsum += a[j];
+            j++;
+         }
+         if(currsum == f) 
+         {
+            cnt++;  
+            maxilen = max(maxilen, j - (mark + 1)); 
+            mark = j - 1;
+            currsum = 0;
+            
+         }
+         else break;
+      }
+      if(cnt == i) ans = min(ans, maxilen);
+   }
+   cout << ans << endl;
+}
+
+
 
 int main()
 { 
