@@ -6679,7 +6679,165 @@ void solve1741C()
    cout << ans << endl;
 }
 
+bool isP(ll n)
+{
+   for(ll i = 2; i * i <= n; i++)
+   {
+      if(n % i == 0) return false;
+   }
+   return true;
+}
 
+void solve1454D()
+{
+   ll n; 
+   cin >> n;
+   if(isP(n) == true)
+   {
+      cout << 1 << endl;
+      cout << n << endl;
+      return;
+   }
+   
+   vector<pair<ll, ll>> a;
+   for(ll i = 2; i * i <= n; i++)
+   {
+      if(n % i == 0)
+      {
+         ll cnt = 0;
+         while(n % i == 0)
+         {
+            n /= i;
+            cnt++;
+         }
+         a.push_back({cnt, i});
+      }
+   }
+   if(n > 1) a.push_back({1, n});
+   
+   sort(a.begin(), a.end());
+   //for(auto elem : a) cout << "(" << elem.first << " " << elem.second << ")"; cout << endl;
+   
+   cout << a.back().first << endl;
+   ll ans = 1;
+   int s = a.size();
+   for(int i = 0; i < s; i++)
+   {
+      ll cnt = a[i].first;
+      if(i == s - 1) cnt = 1;
+      ll p = a[i].second;
+      ll m = 1;
+      for(int j = 1; j <= cnt; j++) m = m * 1ll * p;
+      ans = ans * 1ll * m;
+   }
+   for(int j = 1; j <= a[s - 1].first - 1; j++) cout << a[s - 1].second << " ";
+   cout << ans << endl;
+}
+
+void solve1742A()
+{
+   vector<int> a(3);
+   for(int i = 0; i < 3; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   if(a[0] + a[1] == a[2]) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1742B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   sort(a.begin(),  a.end());
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(a[i] == a[i + 1]) 
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   
+   cout << "YES" << endl;
+}
+
+void solve1742C()
+{
+   vector<vector<char>> a(8, vector<char> (8));
+   for(int i = 0; i < 8; i++)
+   {
+      string in;
+      cin >> in;
+      for(int j = 0; j < 8; j++)
+      {
+         a[i][j] = in[j];
+      }
+   }
+   /*for(auto elem : a)
+   {
+      for(auto e : elem) cout << e << " "; cout << endl;
+   }*/
+   for(int i = 0; i < 8; i++)
+   {
+      int cnt = 0;
+      for(int j = 0; j < 8; j++)
+      {
+         if(a[i][j] == 'R') cnt++;
+      }
+      if(cnt == 8)
+      {
+         cout << "R" << endl;
+         return;
+      }
+   }
+   
+   for(int i = 0; i < 8; i++)
+   {
+      int cnt = 0;
+      for(int j = 0; j < 8; j++)
+      {
+         if(a[j][i] == 'B') cnt++;
+      }
+      if(cnt == 8)
+      {
+         cout << "B" << endl;
+         return;
+      }
+   }
+}
+
+void solve1742D()
+{
+   int n;
+   cin >> n;
+   vector<int> a(10007, -1);
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      a[x] = i;
+   }
+   
+   int maxi = -1;
+   
+   for(int i = 1; i <= 1000; i++)
+   {
+      if(a[i] == -1) continue;
+      for(int j = i; j <= 1000; j++)
+      {
+         if(a[j] != -1)
+         {
+            if(__gcd(i, j) == 1)
+            {
+               maxi = max(maxi, a[i] + a[j]);
+            }
+         }
+      }
+   }
+   
+   cout << maxi << endl;
+}
 
 int main()
 { 
