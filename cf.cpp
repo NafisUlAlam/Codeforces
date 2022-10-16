@@ -6839,6 +6839,190 @@ void solve1742D()
    cout << maxi << endl;
 }
 
+void solve1744A()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto & e : a) cin >> e;
+   string s;
+   cin >> s;
+   
+   map<int, char> mp;
+   for(int i = 0; i < n; i++)
+   {
+      int key = a[i];
+      char val = s[i];
+      if(mp.count(key) == 0)
+      {
+         mp[key] = val;
+      }
+      else
+      {
+         if(mp[key] != val)
+         {
+            cout << "NO" << endl;
+            return;
+         }
+      }
+   }
+   
+   cout << "YES" << endl;
+}
+
+
+void solve1744B()
+{
+   ll n, q, evencount = 0, oddcount = 0, evensum = 0, oddsum = 0, totalsum = 0;
+   cin >> n >> q;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      if(a[i] % 2 == 0)
+      {
+         evencount++;
+         evensum += a[i];
+      }
+      else 
+      {
+         oddcount++;
+         oddsum += a[i];
+      }
+   }
+   
+   totalsum = evensum + oddsum;
+   while(q--)
+   {
+      int t, x;
+      cin >> t >> x;
+      if(t == 0)
+      {
+         if(x % 2 == 0)
+         {
+            totalsum += evencount * 1ll * x;
+            evensum = evencount * 1ll * x + evensum;
+         }
+         else
+         {
+            totalsum += evencount * 1ll * x;
+            oddcount += evencount;
+            evencount = 0;
+            oddsum = totalsum;
+            evensum = 0;
+         }
+      }
+      else
+      {
+         if(x % 2 == 0)
+         {
+            totalsum += oddcount * 1ll * x;
+            oddsum = oddcount * 1ll * x + oddsum;
+         }
+         else
+         {
+            totalsum += oddcount * 1ll * x;
+            evencount += oddcount;
+            oddcount = 0;
+            evensum = totalsum;
+            oddsum = 0;
+         }
+      }
+      cout << totalsum << endl;
+   }
+}
+
+void solve1744C()
+{
+   int n; char c;
+   cin >> n >> c;
+   string s;
+   cin >> s;
+   
+   if(c == 'g')
+   {
+      cout << 0 << endl;
+      return;
+   }
+   
+   vector<int> on, g;
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == 'g') g.push_back(i);
+      else if(s[i] == c) on.push_back(i);
+   }
+   
+   int maxi = INT_MIN;
+   int i = 0, j = 0;
+   
+   for(i = 0; i < on.size(); i++)
+   {
+      int f = on[i];
+      int s = lower_bound(g.begin(), g.end(), f) - g.begin();
+      int seco;
+      if(s < g.size())
+      {
+         seco = g[s];
+         maxi = max(maxi, abs(f - seco));
+      }
+      else 
+      {
+         seco = g[0] + n - f;
+         maxi = max(maxi, seco);
+      }
+      
+   }
+   cout << maxi << endl;
+}
+
+void solve1746A()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n + 1);
+   bool f = false;
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      if(a[i] == 1) f = true;
+   }
+   
+   if(f == true) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1746B()
+{
+   int n;
+   cin >> n;
+   vector<int> z, o;
+   for(int i = 1; i <= n; i++)
+   {
+      int x; 
+      cin >> x;
+      if(x == 1) o.push_back(i);
+      else z.push_back(i);
+   }
+   int ans = 0;
+   int ze = z.size();
+   int on = o.size();
+   if(ze == 0 || on == 0)
+   {
+      cout << ans << endl;
+      return;
+   }
+   int i = 0, j = ze - 1;
+   for(i = 0; i < on; i++)
+   {
+      if(j >= 0 && o[i] < z[j]) 
+      {
+         ans++; z.pop_back();
+         j--;
+      }
+   }
+   cout << ans << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
