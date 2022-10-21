@@ -7212,6 +7212,27 @@ void solve1746C()
    cout << endl;
 }
 
+void solve1749C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto & e : a) cin >> e;
+   sort(a.begin(), a.end()); 
+   int ans = 0;
+   int k, i, j;
+   for(k = 0; 2 * k - 2 < n; k++)
+   {
+      for(i = 2 * k - 2, j = k; j >= 1; j--, i--)
+      {
+         if(a[i] > j) break;
+      }
+      if(j == 0) ans = k;
+      else break;
+   }
+   
+   cout << ans << endl;
+}
 
 int main()
 { 
