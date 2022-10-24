@@ -7234,6 +7234,32 @@ void solve1749C()
    cout << ans << endl;
 }
 
+void solve1736B()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n), b(n + 1);
+   for(ll i = 0; i < n; i++) cin >> a[i];
+   b[0] = a[0], b[n] = a[n - 1];
+   for(ll i = 1; i <= n - 1; i++)
+   {
+      b[i] = (a[i - 1] * a[i]) / __gcd(a[i - 1], a[i]);
+   }
+   
+   //for(auto elem : b) cout << elem << " "; cout << endl;
+   
+   for(int i = 0; i + 1 <= n; i++)
+   {
+      if(__gcd(b[i], b[i + 1]) != a[i]) 
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   
+   cout << "YES" << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
