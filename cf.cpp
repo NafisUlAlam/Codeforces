@@ -7260,6 +7260,339 @@ void solve1736B()
    cout << "YES" << endl;
 }
 
+void solve1364B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), b, ans;
+   for(auto &e : a) cin >> e;
+   for(int i = 1; i < n; i++)
+   {
+      b.push_back(a[i] - a[i - 1]);
+   }
+   int sign = b[0] > 0 ? 1 : -1;
+   ans.push_back(a[0]);
+   int j = 1;
+   n = b.size();
+   while(j < n)
+   {
+      while(j < n && (b[j] / abs(b[j])) == sign) j++;
+      if(j < n && (b[j] / abs(b[j])) != sign)
+      {
+         ans.push_back(a[j]);
+         sign *= -1;
+      }
+   }
+   ans.push_back(a.back());
+   cout << ans.size() << endl;
+   for(auto elem : ans) cout << elem << " "; cout << endl;
+   
+}
+
+void solve1373C()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   vector<int> a(n + 1, 0);
+   for(int i = 1; i <= n; i++)
+   {
+      a[i] = a[i - 1] + ((s[i - 1] == '+') ? 1 : -1);
+   }
+   //for(auto elem : a) cout << elem <<" "; cout << endl;
+   int search = -1;
+   ll ans = n;
+   for(int i = 1; i <= n; i++)
+   {
+      if(a[i] == search)
+      {
+         ans += i;
+         search--;
+         //cout << "found " << i << endl;
+      }
+   }
+   
+   cout << ans << endl;
+}
+
+void solve1203C()
+{
+   int n;
+   cin >> n;
+   vector<ll> a(n);
+   ll ans = 0;
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      ans = __gcd(ans, a[i]);
+      
+   }
+   ll cnt = 0;
+   for(ll i = 1; i * i <= ans; i++)
+   {
+      if(i * i != ans && ans % i == 0) cnt += 2;
+      else if (i * i == ans && ans % i == 0) cnt++;
+   }
+   
+   cout << cnt << endl;
+}
+
+void solve1740A()
+{
+   int n;
+   cin >> n;
+   cout << n << endl;
+}
+
+void solve1740B()
+{
+   ll n;
+   cin >> n;
+   vector<pair<ll, ll>> a(n);
+   ll l = 0, b = 0;
+   for(int i = 0; i < n; i++)
+   {
+      ll x, y;
+      cin >> x >> y;
+      if(y > x) swap(x, y);
+      a[i] = make_pair(x, y);
+      b += y;
+   }
+   
+   sort(a.begin(), a.end());
+   //for(auto elem : a) cout << "(" << elem.first << " " << elem.second << ")"; cout << endl; 
+   b *= 2;
+   l += a[0].first;
+   ll curr = a[0].first;
+   for(int i = 1; i < n; i++)
+   {
+      l += a[i].first - curr;
+      curr = a[i].first;
+   }
+   
+   l += a[n - 1].first;
+   ll ans = b + l;
+   //cout << l << " " << b << endl;
+   cout << ans << endl;
+}
+
+void solve1037C()
+{
+   int n;
+   cin >> n;
+   string a, b;
+   cin >>  a >> b;
+   ll ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] != b[i])
+      {
+         if(a[i] == '0')
+         {
+            if(i + 1 < n && a[i + 1] == '1' && b[i + 1] == '0')
+            {
+               ans++;
+               i++;
+            }
+            else 
+            {
+               ans++;
+            }
+         }
+         else if(a[i] == '1')
+         {
+            if(i + 1 < n && a[i + 1] == '0' && b[i + 1] == '1')
+            {
+               ans++;
+               i++;
+            }
+            else ans++;
+         }
+      }
+   }
+   
+   cout << ans << endl;
+}
+
+void solve1407B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), ans;
+   unordered_set<int> st;
+   int maxi = INT_MIN;
+   int idx = -1;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      if(maxi < a[i])
+      {
+         maxi = a[i];
+         idx = i;
+      }
+   }
+   
+   st.insert(idx);
+   ans.push_back(idx);
+   int curr = maxi;
+   while(ans.size() != n)
+   {
+      int maxigc = 0;
+      for(int i = 0; i < n; i++)
+      {
+         if(st.find(i) != st.end()) continue;
+         int gc = __gcd(a[i], curr);
+         if(gc > maxigc)
+         {
+            idx = i;
+            maxigc = gc;
+         }
+      }
+      st.insert(idx);
+      ans.push_back(idx);
+      curr = maxigc;
+   }
+   
+   for(int i = 0; i < n; i++) cout << a[ans[i]] << " "; cout << endl;
+}
+
+void solve1433E()
+{
+   int n;
+   cin >> n;
+   ll ans = 0;
+   ll nume = 1;
+   ll den = 1;
+   for(int i = n, j = 1; j <= (n / 2) ; j++, i--)
+   {
+      nume *= i;
+      den *= j;
+   }
+   ans = nume / den;
+   
+   nume = 1;
+   for(int i = 1; i <= (n / 2) - 1; i++)
+   {
+      nume *= i;
+   }
+   ans = ans * nume * nume;
+   cout << ans / 2 << endl;
+}
+
+void solve1476B()
+{
+   ll n, k;
+   cin >> n >> k;
+   vector<ll> a(n), pref(n);
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      if(i == 0) pref[i] = a[i];
+      else pref[i] = pref[i - 1] + a[i];
+   }
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   
+   ll ans = 0;
+   //double multiply = 100.0 / k;
+   for(int i = 1; i < n; i++)
+   {
+      ans = max(ans, (100ll * a[i] - k * pref[i - 1] + k - 1) / k);
+      //ll b = ceil(a[i] * multiply);
+      //ans = max(ans, b - pref[i - 1]);
+      
+   }
+   cout << ans << endl;
+}
+
+void solve1466C()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   int ans = 0;
+   vector<bool> used(n, false);
+   for(int i = 1; i < n; i++)
+   {
+      bool need = false;
+      if(s[i] == s[i - 1] && used[i - 1] == false)
+      {
+         need = true;
+      }
+      if(i - 2 >= 0 && s[i] == s[i - 2] && used[i - 2] == false)
+      {
+         need = true;
+      }
+      
+      used[i] = need;
+      ans += used[i];
+   }
+   cout << ans << endl;
+}
+
+void solve1747B()
+{
+   int n1;
+   cin >> n1;
+   n1 *= 3;
+   vector<int> a, n;
+   for(int i = 2; i <= n1; i += 3) a.push_back(i);
+   for(int i = 3; i <= n1; i += 3) n.push_back(i);
+   vector<pair<int, int>> ans;
+   
+   int i = 0, j = (int) n.size() - 1;
+   
+   while(i < a.size() && a[i] < n[j])
+   {
+      ans.push_back({a[i], n[j]});
+      i++; j--;
+   }
+   
+   cout << ans.size() << endl;
+   for(auto elem : ans) cout << elem.first << " " << elem.second << endl;
+}
+
+void solve1420C1()
+{
+   int n, q;
+   cin >> n >> q;
+   vector<int> a(n), minima, maxima;
+   for(auto &e : a) cin >> e;
+   ll ans = 0;
+   if(n > 1)
+   {
+      if(a[0] > a[1]) maxima.push_back(0);
+      else minima.push_back(0);
+      for(int i = 1; i <= n - 2; i++)
+      {
+         if(a[i] > a[i - 1] && a[i] > a[i + 1]) maxima.push_back(i);
+         if(a[i] < a[i - 1] && a[i] < a[i + 1]) minima.push_back(i);
+      }
+      if(a[n - 1] > a[n - 2]) maxima.push_back(n - 1);
+      else minima.push_back(n - 1);
+      
+      //for (auto elem : maxima) cout << elem << " "; cout << endl;
+      //for (auto elem : minima) cout << elem << " "; cout << endl;
+      
+      
+      int n1 = maxima.size();
+      for(int i = 0; i + 1 < n1; i++)
+      {
+         int f = maxima[i];
+         int mini = lower_bound(minima.begin(), minima.end(), f) - minima.begin();
+         int mini2 = minima[mini];
+         //cout << a[f] << " " << a[s] << " " << a[mini2] << endl;
+         ans += a[f] - a[mini2];
+         //cout << ans << endl;
+      }
+      ans += a[maxima.back()];
+   }
+   
+   else ans = a[0];
+   
+   cout << ans << endl;
+}
+
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
