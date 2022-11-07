@@ -7592,6 +7592,37 @@ void solve1420C1()
    cout << ans << endl;
 }
 
+void solve1742E()
+{
+   ll n, q;
+   cin >> n >> q;
+   vector<ll> a(n + 1), b(n + 1, 0), pref(n + 1, 0);
+   ll curr = 0;
+   for(int i = 1; i <= n; i++) 
+   {
+      cin >> a[i];
+      pref[i] += pref[i - 1] + a[i];
+      if(a[i] >= curr)
+      {
+         b[i] = a[i];
+         curr = a[i];
+      }
+      else b[i] = curr;
+   }
+   
+   //for(auto elem : b) cout << elem << " "; cout << endl;
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   for(int i = 1; i <= q; i++)
+   {
+      ll x;
+      cin >> x;
+      ll ans = 0;
+      ll idx = upper_bound(b.begin(), b.end(), x) - b.begin();
+      idx--;
+      cout << pref[idx] << " ";
+   }
+   cout << endl;
+}
 
 int main()
 { 
