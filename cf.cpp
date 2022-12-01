@@ -8166,6 +8166,229 @@ void solve1760C()
    cout << endl;
 }
 
+void solve1759D()
+{
+   ll n, m;
+   cin >> n >> m;
+   int cnt2 = 0;
+   int cnt5 = 0;
+   ll copyn = n;
+   
+   while (copyn % 2 == 0)
+   {
+      cnt2++;
+      copyn /= 2;
+   }
+   
+   while(copyn % 5 == 0)
+   {
+      cnt5++;
+      copyn /= 5;
+   }
+   //cout << cnt2 << " " << cnt5 << " " << copyn << endl;
+   
+   if(cnt2 != cnt5)
+   {
+      while(cnt2 < cnt5 && m >= 2)
+      {
+         cnt2++;
+         m /= 2;
+      }
+      while(cnt5 < cnt2 && m >= 5)
+      {
+         cnt5++;
+         m /= 5;
+      }
+   }
+   
+   while(m >= 10)
+   {
+      cnt2++;
+      cnt5++;
+      m /= 10;
+   }
+   
+   cout << (ll) (pow(2, cnt2) * 1ll * pow(5, cnt5) * m * copyn)<< endl;
+}
+
+
+void solve1603A()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n + 1);
+   for(ll i = 1; i <= n; i++) cin >> a[i];
+   ll lcm = 1;
+   
+   for(ll i = 1; i <= n; i++)
+   {
+      if(i <= 22) lcm = ( lcm * 1ll * (i + 1) ) / (__gcd(lcm, i + 1));
+      //cout << i << " " << lcm << endl;
+      if(a[i] % lcm == 0) {cout << "NO" << endl; return;}
+   }
+   cout << "YES" << endl;
+}
+
+void solve479C()
+{
+   int n;
+   cin >> n;
+   vector<pair<int, int>> a(n);
+   for(int i = 0; i < n; i++)
+   {
+      int x, y;
+      cin >> x >> y;
+      a[i] = make_pair(x, y);
+   }
+   
+   sort(a.begin(), a.end());
+   int ans = a[0].second;
+   for(int i = 1; i < n; i++)
+   {
+      if(ans <= a[i].second)
+      {
+         ans = a[i].second;
+      }
+      else ans = a[i].first;
+   }
+   cout << ans << endl;
+   
+}
+
+void solve698A()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1);
+   vector<vector<int>> dp(n + 1, vector<int>(3, 0));
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   
+   for(int i = 1; i <= n; i++)
+   {
+      int maxi = max(dp[i - 1][0], max(dp[i - 1][1], dp[i - 1][2]));
+      for(int j = 0; j <= 2; j++)
+      {
+         if(j == 0) dp[i][j] = maxi;
+         else if(j == 1 && (a[i] == 1 || a[i] == 3) )
+         {
+            dp[i][j] = max(dp[i - 1][0], dp[i - 1][2]) + 1;
+         }
+         else if(j == 2 && (a[i] == 2 || a[i] == 3) )
+         {
+            dp[i][j] = max(dp[i - 1][0], dp[i - 1][1]) + 1;
+         }
+         else dp[i][j] = maxi;
+         //cout << i << " " << j << " "<< dp[i][j] << endl;
+      }
+   }
+   
+   /*for(int i = 0; i <= n; i++) 
+   {
+      for(int j = 0; j <= 2; j++) cout << dp[i][j] << " "; cout << endl;
+   }*/
+   
+   cout << n - max(dp[n][0], max(dp[n][1], dp[n][2])) << endl;
+}
+
+void solve1348B()
+{
+   int n, k;
+   cin >> n >> k;
+   set<int> st;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      st.insert(a[i]);
+   }
+   if(st.size() > k) 
+   {
+      cout << -1 << endl;
+      return;
+   }
+   
+   int in = 1;
+   while(st.size() < k)
+   {
+      if(st.find(in) == st.end()) st.insert(in);
+      in++;
+   }
+   
+   cout << n * st.size() << endl;
+   for(int i = 1; i <= n; i++)
+   {
+      for(auto elem : st) cout << elem << " ";
+   }
+   cout << endl;
+}
+
+void solve1526B()
+{
+   int n;
+   cin >> n;
+   while(1)
+   {
+      if(n % 111 == 0)
+      {
+         cout << "YES" << endl;
+         goto done;
+      }
+      n -= 11;
+      if(n < 0) break;
+   }
+   
+   //cout << eleven << " " << hun << endl;
+   cout << "NO" << endl;
+   
+   done: ;
+}
+
+void solve515C()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   sort(s.begin(), s.end());
+   vector<int> pref(10, 0);
+   int cnt = 0;
+   for(int i = 9; i >= 2; i--)
+   {
+      char ch = i + '0';
+      int lo = lower_bound(s.begin(), s.end(), ch) - s.begin();
+      int hi = upper_bound(s.begin(), s.end(), ch) - s.begin();
+      //cout << ch << " " << lo << " " << hi << endl;
+      cnt += hi - lo;
+      pref[i] = cnt;
+   }
+   
+   //for(int i = 2; i <= 9; i++)cout <<"(" << i << " " << pref[i] <<")";cout << endl;
+   string ans;
+   for(int i = 9; i >= 0; i--)
+   {
+      if(pref[i] == 0) continue;
+      int num = i;
+      if(num >= 4 && (num % 2 == 0 || num % 3 == 0))
+      {
+         int cnt = 0;
+         while(num % 2 == 0) {cnt++; num /= 2;}
+         //cout << cnt << endl;
+         pref[2] += cnt * pref[i];
+         cnt = 0;
+         while(num % 3 == 0) {cnt++; num /= 3;}
+         pref[3] += cnt * pref[i];
+         pref[i] = 0;
+         continue;
+      }
+      
+      int curr = pref[i];
+      for(int j = 1; j <= curr; j++) ans.push_back(i + '0');
+      for(int j = i; j >= 2; j--) pref[j] -= curr;
+      
+   }
+   //for(int i = 2; i <= 9; i++)cout <<"(" << i << " " << pref[i] <<")";cout << endl;
+   cout << ans << endl;
+}
 
 int main()
 { 
