@@ -9019,15 +9019,27 @@ void solve1762B()
 {
    int n, maxi = -1;
    cin >> n;
-   vector<int> a(n);
+   vector<pair<int, int>> a(n);
    for(int i = 0; i < n; i++)
    {
-      cin >> a[i];
-      maxi = max(a[i], maxi);
+      int x;
+      cin >> x;
+      a[i] = make_pair(x, i + 1);
    }
    
-   cout << n << endl;
-   for(int i = 0; i < n; i++) cout << maxi - a[i] << " "; cout << endl;
+   sort(a.begin(), a.end());
+   //cout << n << endl;
+   vector<pair<int, int>> ans;
+   for(int i = 1; i < n; i++)
+   {
+      int rem = a[i].first % a[i - 1].first;
+      if(rem == 0) continue;
+      int add = a[i - 1].first - rem;
+      a[i].first += add;
+      ans.push_back(make_pair(a[i].second, add));
+   }
+   cout << ans.size() << endl;
+   for(auto elem : ans) cout << elem.first << " " << elem.second << endl;
 }
 
 void solve1362C()
