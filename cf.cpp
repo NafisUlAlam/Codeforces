@@ -9303,6 +9303,323 @@ void solve289B()
    cout << ans << endl;
 }
 
+void solve1779B()
+{
+   int n;
+   cin >> n;
+   if(n == 3) 
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   vector<int> a(n);
+   if(n % 2 == 0)
+   {
+      for(int i = 0; i < n; i++)
+      {
+         if(i % 2 == 0) a[i] = -1;
+         else if(i % 2 == 1) a[i] = 1;
+      }
+   }
+   
+   else
+   {
+      for(int i = 0; i < n; i++)
+      {
+         if(i % 2 == 0) a[i] = (-1) * n;
+         else a[i] = 2 * n;
+      }
+   }
+   
+   cout << "YES" << endl;
+   for(auto elem : a) cout << elem << " "; cout << endl;
+}
+
+void solve1382B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   
+   if(a[0] > 1)
+   {
+      cout << "First" << endl;
+      return;
+   }
+   
+   int i = 0, cnt = 0;
+   while(i < n - 1 && a[i] == 1) {cnt++; i++;}
+   
+   if(cnt % 2 == 0) cout << "First" << endl;
+   else cout << "Second" << endl;
+}
+
+void solve1548A()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<set<int>>a(n + 1);
+   for(int i = 1; i <= n; i++) a[i].insert(i);
+   int ans = n;
+   while(m--)
+   {
+      int u, v;
+      cin >> u >> v;
+      if(u > v) swap(u, v); // u will have smaller
+      if(a[u].size() == 1) ans--;
+      a[u].insert(v);
+   }
+   
+   int q;
+   cin >> q;
+   while(q--)
+   {
+      int type;
+      cin >> type;
+      if(type == 1)
+      {
+         int u, v;
+         cin >> u >> v;
+         if(u > v) swap(u, v);
+         if(a[u].size() == 1) ans--;
+         a[u].insert(v);
+      }
+      else if(type == 2)
+      {
+         int u, v;
+         cin >> u >> v;
+         if(u > v) swap(u, v);
+         a[u].erase(v);
+         if(a[u].size() == 1) ans++;
+      }
+      else if(type == 3)
+      {
+         cout << ans << endl;
+      }
+   }
+}
+
+void solve1182A()
+{
+   int n;
+   cin >> n;
+   if(n % 2 == 1) cout << 0 << endl;
+   else cout << (int) pow(2, n / 2) << endl;
+}
+
+void solve1462D()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n), b;
+   for(int i = 0; i < n; i++) cin >> a[i];
+   
+   ll ans = n - 1;
+   ll currsum = 0;
+   for(int i = 0; i < n; i++)
+   {
+      currsum += a[i];
+      b.push_back(currsum);
+      ll sum = 0;
+      ll j;
+      for(j = i + 1; j < n; j++)
+      {
+         sum += a[j];
+         if(sum < currsum) continue;
+         else if (sum == currsum) 
+         {
+            b.push_back(sum); 
+            sum = 0;
+            
+         }
+         else 
+         {
+            b.clear();
+            break;
+         }
+      }
+      if(j == n)
+      {
+         //for(auto elem : b) cout << elem << " "; cout << endl;
+         if(sum == 0)ans = min(ans, (ll)abs((ll)a.size() - (ll)b.size()));
+         else ans = min(ans, n - 1);
+         b.clear();
+      }
+   }
+   cout << ans << endl;
+}
+
+void solve1783A()
+{
+   int n;
+   cin >> n; 
+   vector<int> a(n), b(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   int i = 0, j = n - 1, k;
+   for(k = 0; k < n; k++)
+   {
+      if(k % 2 == 0) b[k] = a[j--];
+      else b[k] = a[i++];
+   }
+   //for(auto elem : b) cout << elem << " "; cout << endl;
+   int sum = 0;
+   for(i = 0; i < n; i++)
+   {
+      if(sum == b[i])
+      {
+         cout << "NO" << endl;
+         return;
+      }
+      sum += b[i];
+   }
+   
+   cout << "YES" << endl;
+   for(auto elem : b) cout << elem << " "; cout << endl;
+}
+
+
+void solve1141A()
+{
+   int n, m;
+   cin >> n >> m;
+   map<int, int> mp;
+   for(int i = 2; i * i <= m; i++)
+   {
+      int cnt = 0;
+      while(m % i == 0) 
+      {
+         cnt++; 
+         m /= i;
+      }
+      mp[i] = cnt;
+   }
+   if(m > 1) mp[m] = 1;
+   
+   for(int i = 2; i * i <= n; i++)
+   {
+      int cnt = 0;
+      while(n % i == 0)
+      {
+         cnt++;
+         n /= i;
+      }
+      mp[i] -= cnt;
+   }
+   if(n > 1) mp[n] -= 1;
+   int ans = 0;
+   for(auto elem : mp)
+   {
+      if( (elem.first <= 3 && elem.second < 0) || (elem.first > 3 && elem.second != 0))
+      {
+         cout << -1 << endl;
+         return;
+      }
+      ans += elem.second;
+   }
+   cout << ans << endl;
+}
+
+void solve118B()
+{
+   int n;
+   cin >> n;
+   for(int i = 0; i <= n; i++)
+   {
+      int spaces = 2 * (n - i);
+      for(int j = 1; j <= spaces; j++)
+      {
+         cout << " ";
+      }
+      int cnt = 0;
+      for(int numbers = 1; numbers <= 2 * i + 1; numbers++)
+      {
+         if(numbers < 2 * i + 1)cout << cnt << " ";
+         else cout << cnt;
+         
+         if(numbers < i + 1)cnt++;
+         else cnt--;
+      }
+      cout << endl;
+   }
+   
+   for(int i = 1; i <= n; i++)
+   {
+      int spaces = 2 * i;
+      for(int j = 1; j <= spaces; j++)
+      {
+         cout << " ";
+      }
+      int cnt = 0;
+      int numbers = 2 * n - (2 * i - 1);
+      for(int j = 1; j <= numbers; j++)
+      {
+         if(j < numbers)cout << cnt << " ";
+         else cout << cnt;
+         
+         if(j < (numbers + 1) / 2)cnt++;
+         else cnt--;
+      }
+      cout << endl;
+   }
+}
+
+void solve1772D()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   int mini = 0, maxi = 1e9;
+   
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(a[i] < a[i + 1])
+      {
+         if(maxi == 1e9) maxi = (a[i] + a[i + 1]) / 2;
+         else maxi = min(maxi, (a[i] + a[i + 1]) / 2);
+      }
+      else if (a[i] > a[i + 1]) 
+      {
+         if(mini == 0) mini = (a[i] + a[i + 1] + 1) / 2;
+         else mini = max(mini, (a[i] + a[i + 1] + 1) / 2);
+      }
+   }
+   if(mini <= maxi) cout << mini << endl;
+   else cout << -1 << endl;
+}
+
+void solve1395A()
+{
+   int r, g, b, w;
+   cin >> r >> g >> b >> w;
+   int odds = 0;
+   if(r % 2 == 1) odds++;
+   if(g % 2 == 1) odds++;
+   if(b % 2 == 1) odds++;
+   if(w % 2 == 1) odds++;
+   if(odds > 1)
+   {
+      if(r == 0 || g == 0 || b == 0)
+      {
+         cout << "No" << endl;
+         return;
+      }
+      else
+      {
+         w += 3;
+         r--; g--; b--;
+         odds = 0;
+         if(r % 2 == 1) odds++;
+         if(g % 2 == 1) odds++;
+         if(b % 2 == 1) odds++;
+         if(w % 2 == 1) odds++;
+      }
+   }
+   if(odds > 1) cout << "No" << endl;
+   else cout << "Yes" << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
