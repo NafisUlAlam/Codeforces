@@ -10179,6 +10179,325 @@ void solve1790D()
    cout << cnt << endl;
 }
 
+void solve1425A()
+{
+   ll n, curr;
+   cin >> n;
+   curr = n;
+   bool f = true;
+   ll ans = 0;
+   while(n > 0)
+   {
+      if(f == true)
+      {
+         if(n % 2 == 0)
+         {
+            if(n % 4 != 0 || n == 4)
+            {
+               n /= 2;
+               ans += n;
+               f = false;
+            }
+            else
+            {
+               ans += 1;
+               n -= 1;
+               f = false;
+            }
+         }
+         else
+         {
+            ans += 1;
+            n--;
+            f = false;
+         }
+      }
+      else
+      {
+         if(n % 2 == 0)
+         {
+            if(n % 4 != 0 || n == 4)
+            {
+               n /= 2;
+               f = true;
+            }
+            else
+            {
+               n -= 1;
+               f = true;
+            }
+         }
+         else
+         {
+            n--;
+            f = true;
+         }
+      }
+   }
+   cout << ans << endl;
+}
+
+void solve1514B()
+{
+   ll n, k, mod = 1e9 + 7;
+   cin >> n >> k;
+   ll power = 1;
+   for(int i = 1; i <= k; i++) power = ( (power % mod) * (n % mod) ) % mod;
+   cout << power << endl;
+}
+
+void solve630C()
+{
+   vector<ll> a(56);
+   for(int i = 0; i < 56; i++) a[i] = (ll) pow(2, i);
+   ll m, ans = 0;
+   cin >> m;
+   for(int i = 1; i <= m; i++) ans += a[i];
+   cout << ans << endl;
+}
+
+void solve1543A()
+{
+   ll a, b;
+   cin >> a >> b;
+   if(a < b) swap(a, b);
+   ll diff = a - b;
+   ll f = a % diff;
+   ll s = diff - f;
+   if(diff == 0) cout << 0 << " " << 0 << endl;
+   else cout << diff << " " << min(f, s) << endl;
+}
+
+void solve1574B()
+{
+   int m;
+   vector<int> a(3);
+   for(auto& e : a) cin >> e; cin >> m;
+   sort(a.begin(), a.end());
+   int maxi = a[0] + a[1] + a[2] - 3;
+   int r = a[0] + a[1] + 1;
+   int mini = max(0, a[2] - r);
+   if(m < mini || m > maxi) cout << "NO" << endl;
+   else cout << "YES" << endl;
+}
+
+void solve1791A()
+{
+   string s = "codeforces";
+   char c;
+   cin >> c;
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(s[i] == c) {cout << "YES" << endl; return;}
+   }
+   cout << "NO" << endl;
+}
+
+void solve1791B()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   bool flag = false;
+   pair<int, int> curr = make_pair(0, 0);
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == 'L') curr.first--;
+      else if(s[i] == 'R') curr.first++;
+      else if(s[i] == 'U') curr.second++;
+      else curr.second--;
+      
+      if(curr.first == 1 && curr.second == 1) flag = true;
+   }
+   if(flag) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1791C()
+{
+   int n;
+   cin >> n;
+   string s;
+   cin >> s;
+   int l = 0, r = n - 1;
+   while(l != r && s[l] != s[r])
+   {
+      l++, r--;
+   }
+   cout << max(0, r - l + 1) << endl;
+}
+
+void solve1791D()
+{
+   int n; string s;
+   cin >> n;
+   cin >> s;
+   vector<int> pref(n, 0), suff(n, 0), a(26, 0), b(26, 0);
+   pref[0] = 1;
+   a[s[0] - 'a']++;
+   suff[n - 1] = 1;
+   b[s[n - 1] - 'a']++;
+   for(int i = 1; i < n; i++)
+   {
+      if(a[s[i] - 'a'] == 0) {pref[i] = pref[i - 1] + 1; a[s[i] - 'a']++;}
+      else pref[i] = pref[i - 1];
+   }
+   
+   for(int i = n - 2; i >= 0; i--)
+   {
+      if(b[s[i] - 'a'] == 0) {suff[i] = suff[i + 1] + 1; b[s[i] - 'a']++;}
+      else suff[i] = suff[i + 1];
+   }
+   
+   int maxi = 0;
+   for(int i = 0; i + 1 < n; i++) maxi = max(maxi, pref[i] + suff[i + 1]);
+   cout << min(n, maxi) << endl;
+}
+
+void solve1791E()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   ll neg = 0, ze = 0, sum = 0, mini = 1e18;
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      if(a[i] == 0ll) ze++;
+      else if(a[i] < 0ll) neg++;
+   
+      mini = min(mini, abs(a[i]));
+      sum += abs(a[i]);
+   }
+   
+   if(neg % 2 == 1)sum = sum - (2ll * mini);
+   cout << sum << endl;
+   
+}
+
+
+void solve1786C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   ll moves = 0;
+   int curr = 1;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] == curr) curr++;
+      else if (a[i] < curr) continue;
+      else
+      {
+         moves += a[i] - curr;
+         curr++;
+      }
+      
+   }
+   cout << moves << endl;
+}
+
+void solve1786A1()
+{
+   int n, bob = 0, al = 1;
+   cin >> n;
+   n--;
+   bool b = true;
+   for(int i = 2; n > 0 ; i += 2)
+   {
+      if(b == true)
+      {
+         bob += min(n, i);
+         n -= min(n, i);
+         bob += min(n, i + 1);
+         n -= min(n, i + 1);
+         b = false;
+      }
+      else 
+      {
+         al += min(n, i);
+         n -= min(n, i);
+         al += min(n, i + 1);
+         n -= min(n, i + 1);
+         b = true;
+      }
+   }
+   cout << al << " " << bob << endl;
+}
+
+void solve1786A2()
+{
+   int n, bb = 0, bw = 0, ab = 0,  aw = 1;
+   cin >> n;
+   int nblack = n / 2;
+   int nwhite = (n + 1)/ 2;
+   n--;
+   bool bob = true;
+   bool black = true;
+   for(int i = 2; n > 0 ; i += 2)
+   {
+      if(bob == true)
+      {
+         
+         int cantake = min(n , i);
+         bb += (cantake + 1) / 2;
+         bw += cantake / 2;
+         n -= cantake;
+         cantake = min(n , i + 1);
+         bb += (cantake + 1) / 2;
+         bw += cantake / 2;
+         n -= cantake;
+         bob = false;
+      }
+      else 
+      {
+         int cantake = min(n , i);
+         aw += (cantake + 1) / 2;
+         ab += cantake / 2;
+         n -= cantake;
+         cantake = min(n , i + 1);
+         aw += (cantake + 1) / 2;
+         ab += cantake / 2;
+         n -= cantake;
+         bob = true;
+      }
+   }
+   cout << aw << " " << ab << " " << bw << " " << bb  << endl;
+}
+
+void solve1786B()
+{
+   int n, w, h;
+   cin >> n >> w >> h;
+   vector<pair<int, int>> cake(n), dispenser(n);
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      cake[i] = make_pair(x - w, x + w);
+   }
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      dispenser[i] = make_pair(x - h, x + h);
+   }
+   sort(cake.begin(), cake.end());
+   sort(dispenser.begin(), dispenser.end());
+   int l = INT_MIN, r = INT_MAX;
+   for(int i = 0; i < n; i++)
+   {
+      l = max(l, cake[i].first - dispenser[i].first);
+      r = min(r, cake[i].second - dispenser[i].second);
+   }
+   //cout << l << " " << r << endl;
+   if(l > r) cout << "NO" << endl;
+   else cout << "YES" << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
