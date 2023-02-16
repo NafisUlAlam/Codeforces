@@ -10498,6 +10498,190 @@ void solve1786B()
    else cout << "YES" << endl;
 }
 
+void solve1792B()
+{
+   int a, b, c, d;
+   cin >> a >> b >> c >> d;
+   if(a == 0) {cout << 1 << endl; return;}
+   if(b > c) swap(b, c);
+   int moves = a + 2 * b;
+   moves += min(a + 1, c - b + d);
+   cout << moves << endl;
+}
+
+void solve1537B()
+{
+   int n, m, x, y;
+   cin >> n >> m >> x >> y;
+   int t = 1, l = 1, b = n, r = m;
+   int f = abs(x - 1) +  abs(y - 1) + abs(x - n) + abs(y - r);
+   int s = abs(x - 1) +  abs(y - m) + abs(x - n) + abs(y - 1);
+   if(f >= s) cout << 1 << " " << 1 << " " << n << " " << m << endl; 
+   else cout << 1 << " " << m << " " << n << " " << 1 << endl;
+}
+
+void solve535B()
+{
+   string s;
+   cin >> s;
+   int n = s.size();
+   int index = ( n == 1 ? 0 : (1 << n) - 2 ) , add = 0, mul = 1;
+   for(int i = n - 1; i >= 0; i--)
+   {
+      if(s[i] == '7') add += mul;
+      mul *= 2;
+   }
+   index += add + 1;
+   cout << index << endl;
+}
+
+void solve1535C()
+{
+   string s;
+   cin >> s;
+   ll ans = 0, max0 = 0, max1 = 0;
+   for(int i = 0; i < (int)s.size(); i++)
+   {
+      if(s[i] == '0')
+      {
+         max0++;
+         max1 = 0;
+         ans += max0;
+      }
+      else if(s[i] == '1')
+      {
+         max1++;
+         max0 = 0;
+         ans += max1;
+      }
+      else
+      {
+         max0++;
+         max1++;
+         ans += max(max0, max1);
+      }
+      swap(max1, max0);
+   }
+   cout << ans << endl;
+}
+
+void solve1221C()
+{
+   int c, m, x;
+   cin >> c >> m >> x;
+   if(c > m) swap(c, m);
+   if(c == 0) 
+   {
+      cout << 0 << endl;
+      return;
+   }
+   
+   if(x >= c) cout << c << endl;
+   else
+   {
+      if(2 * (c - x) <= m - x) cout << c << endl;
+      else cout << x + (c - x + m - x) / 3 << endl;
+   }
+}
+
+void solve1371B()
+{
+   ll n, r, ans = 0;
+   cin >> n >> r;
+   if(n > r) ans = (r * 1ll * (r + 1)) / 2;
+   else ans = ((n * 1ll * (n + 1)) / 2) - n + 1ll;
+   cout << ans << endl;
+}
+
+void solve1512C()
+{
+   int z, o;
+   cin >> z >> o;
+   int n = z + o;
+   string s;
+   cin >> s;
+   if(z % 2 == 1 && o % 2 == 1)
+   {
+      cout << -1 << endl;
+      return;
+   }
+   bool f = true;
+   for(int i = 0; i < n; i++)
+   {
+      char a = s[i];
+      char b = s[n - i - 1];
+      if(a == b) continue;
+      if(a != '?' && b != '?') f = false;
+      else
+      {
+         if(a == '?')
+         {
+            swap(s[i], s[n - i - 1]);
+            s[n - i - 1] = s[i];
+         }
+      }
+   }
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == '0') z--;
+      else if(s[i] == '1') o--;
+   }
+   //cout << z << " " << o << endl;
+   //cout << s << " " << z << " " << o << endl;
+   int l = 0, r = n - 1;
+   while(l < r)
+   {
+      if(s[l] != '?') 
+      {
+         l++;
+         r--;
+      }
+      else
+      {
+         if(z >= o)
+         {
+            s[l] = s[r] = '0';
+            z -= 2;
+            l++;
+            r--;
+            //cout << "zero" << endl;
+         }
+         else
+         {
+            s[l] = s[r] = '1';
+            o -= 2;
+            l++;
+            r--;
+            //cout << "one" << endl;
+         }
+      }
+   }
+   if(l == r && s[l] == '?')
+   {
+      if(o == 1) {s[l] = '1'; o--;}
+      else if (z == 1) {s[l] = '0'; z--;}
+      else f = false;
+   }
+   if(z < 0 || o < 0 || f == false) 
+   {
+      cout << -1 << endl;
+      return;
+   }
+   else cout << s << endl;
+}
+void solve80B()
+{
+   string s;
+   cin >> s;
+   int h = 0, m = 0; 
+   double ans1 = 0, ans2 = 0;
+   for(int i = 0; i < 2; i++) h = h * 10 + (s[i] - '0');
+   for(int i = 3; i < 5; i++) m = m * 10 + (s[i] - '0');
+   h = h % 12;
+   ans2 = m * 6;
+   ans1 = h * 30 + m * 0.5;
+   cout << fixed << setprecision(1) << ans1 << " " << ans2 << endl;
+}
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
