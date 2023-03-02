@@ -11046,6 +11046,133 @@ void solve1691C()
    }
 }
 
+void solve1800D()
+{
+   int n; string s;
+   cin >> n >> s;
+   int ans = n - 1;
+   for(int i = n - 1; i >= 2; i--)
+   {
+      if(s[i] == s[i - 2]) ans--;
+   }
+   
+   cout << ans << endl;
+}
+
+void solve1800A()
+{
+   int n; string s, t, u;
+   cin >> n >> s;
+   for(int i = 0; i < n; i++) t.push_back(tolower(s[i]));
+   //cout << t << endl;
+   vector<int> a(26, 0);
+   for(int i = 0; i < n; i++)
+   {
+      char curr = t[i];
+      u.push_back(curr);
+      int j = i;
+      while(j < n && t[j] == curr) j++;
+      i = j - 1;
+   }
+   //cout << u << endl;
+   bool f = (u.size() == 4) && (u[0] == 'm') && (u[1] == 'e') && (u[2] =='o') && (u[3] == 'w');
+   if(f == false) cout << "NO" << endl;
+   else cout << "YES" << endl;
+}
+
+void solve1800B()
+{
+   int n, k; string s;
+   cin >> n >> k >> s;
+   vector<int> upper(26, 0), lower(26, 0);
+   
+   for(int i = 0; i < n; i++)
+   {
+      if(isupper(s[i])) upper[s[i] - 'A']++;
+      else lower[s[i] - 'a']++;
+   }
+   for(int i = 0; i < 26; i++)
+   {
+      if(upper[i] == lower[i]) continue;
+      if(upper[i] < lower[i]) swap(upper[i], lower[i]);
+      int diff = abs(upper[i] - lower[i]);
+      int need = diff / 2;
+      if(k >= need)
+      {
+         lower[i] += need;
+         upper[i] -= need;
+         k -= need;
+      }
+      else
+      {
+         lower[i] += k;
+         upper[i] -= k;
+         k = 0;
+      }
+   }
+   int ans = 0;
+   for(int i = 0; i < 26; i++) ans += min(upper[i], lower[i]);
+   cout << ans << endl;
+}
+
+void solve1800C1()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   priority_queue<ll> pq;
+   ll ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] != 0) 
+      {
+         //cout << a[i] << " is pushed" << endl;
+         pq.push(a[i]);
+      }
+      else
+      {
+         if(pq.size() > 0)
+         {
+            ll x = pq.top();
+            pq.pop();
+            //cout << x << " is added " << endl; 
+            ans += x;
+         }
+      }
+   }
+   cout << ans << endl;
+}
+
+void solve1800C2()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   priority_queue<ll> pq;
+   ll ans = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] != 0) 
+      {
+         //cout << a[i] << " is pushed" << endl;
+         pq.push(a[i]);
+      }
+      else
+      {
+         if(pq.size() > 0)
+         {
+            ll x = pq.top();
+            pq.pop();
+            //cout << x << " is added " << endl; 
+            ans += x;
+         }
+      }
+   }
+   cout << ans << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
