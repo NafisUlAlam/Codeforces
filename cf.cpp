@@ -11173,6 +11173,39 @@ void solve1800C2()
    cout << ans << endl;
 }
 
+void solve1794C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1), b(n + 1), ans(n + 1, 1);
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      b[i] = i;
+   }
+   
+   for(int k = 1; k <= n; k++)
+   {
+      int l = 1, r = k, mark = -1;
+      while(l <= r)
+      {
+         int mid = (l + r) / 2;
+         //cout << " k " << k << " l " << l << " r " << r << " mid " << mid << endl;
+         if(a[k - mid + 1] < b[mid])
+         {
+            r = mid - 1;
+         }
+         else
+         {
+            l = mid + 1;
+            mark = mid;
+         }
+      }
+      ans[k] = ( (mark == -1) ? 1 : mark );
+   }
+   for(int i = 1; i <= n; i++) cout << ans[i] << " "; cout << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
