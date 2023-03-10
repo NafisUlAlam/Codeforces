@@ -11205,6 +11205,339 @@ void solve1794C()
    }
    for(int i = 1; i <= n; i++) cout << ans[i] << " "; cout << endl;
 }
+void solve1624D()
+{
+   int n, k; string s;
+   cin >> n >> k >> s;
+   if(2 * k > n) 
+   {
+      cout << 1 << endl;
+      return;
+   }
+   vector<int> a(26, 0), b(k, 0);
+   for(int i = 0; i < n; i++) a[s[i] - 'a']++;
+   int givenpairs = 0, givensolo = 0;
+   for(int i = 0; i < 26; i++) 
+   {
+      givenpairs += a[i] / 2;
+      givensolo += a[i] % 2;
+   }
+   int row = 0, sz = n / k;
+   while(givenpairs > 0)
+   {
+      if(b[row] + 2 <= sz)b[row] += 2;
+      else givensolo += 2;
+      givenpairs--;
+      row = (row + 1) % k;
+   }
+   vector<bool> flag(k, false);
+   while(givensolo > 0 && flag[row] == false)
+   {
+      if(b[row] + 1 <= sz)b[row]++;
+      flag[row] = true;
+      givensolo--;
+      row = (row + 1) % k;
+   }
+   
+   int ans = INT_MAX;
+   for(int i = 0; i < k; i++) ans = min(ans, b[i]);
+   cout << ans << endl;
+}
+
+void solve1788C()
+{
+   ll n;
+   cin >> n;
+   if(n % 2 == 0) 
+   {
+      cout << "NO" << endl;
+      return;
+   }
+   
+   ll mid = 2 * n + 1, l = 1;
+   cout << "YES" << endl;
+   for(int i = mid - n / 2; i <= mid + n / 2; i += 2)
+   {
+      cout << l << " " << i - l << endl;
+      l++;
+   }
+   for(int i = mid - (n / 2) + 1; i <= mid + n / 2; i += 2)
+   {
+      cout << l << " " << i - l << endl;
+      l++;
+   }
+}
+
+void solve1788B()
+{
+   int n, n1, curr = 0, sum = 0;
+   cin >> n;
+   n1 = n;
+   vector<int> a(10, 0);
+   while(n > 0)
+   {
+      a[curr] = n % 10;
+      sum += n % 10;
+      n /= 10;
+      curr++;
+   }
+   int take = (sum + 1)/ 2;
+   string s;
+   for(int i = 9; i >= 0; i--)
+   {
+      if(take >= a[i])
+      {
+         s.push_back(a[i] + '0');
+         take -= a[i];
+      }
+      else
+      {
+         s.push_back(take + '0');
+         take = 0;
+      }
+   }
+   int ff = stoi(s);
+   int ss = n1 - ff;
+   cout << ff << " " << ss << endl;
+}
+
+void solve1778B()
+{
+   ll n, m, d;
+   cin >> n >> m >> d;
+   vector<int> p(n + 1), a(m + 1);
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      p[x] = i;
+   }
+   
+   for(int i = 1; i <= m; i++)
+   {
+      int x;
+      cin >> x;
+      a[i] = p[x];
+   }
+   //for(auto elem : p) cout << elem << " "; cout << endl;
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   ll ans = INT_MAX;
+   for(int i = 1; i + 1 <= m; i++)
+   {
+      ll op2 = a[i + 1] - a[i];
+      if(op2 > d || op2 < 0)
+      {
+         ans = 0;
+         break;
+      }
+      ll op1 = a[i] - 1 + n - a[i + 1];
+      if(op1 + op2 >= d + 1) op1 = d + 1 - op2;
+      else op1 = INT_MAX;
+      //cout << op1 << " " << op2 << endl;
+      ans = min(ans, min(op1, op2));
+   }
+   cout << ans << endl;
+}
+
+void solve1108D()
+{
+   int n, ans = 0; string s;
+   cin >> n >> s;
+   vector<char> a = {'R', 'G', 'B'};
+   for(int i = 0; i < n; i++)
+   {
+      char c = s[i];
+      int j = i;
+      int len = 0;
+      while(j < n && s[j] == c)
+      {
+         len++;
+         if(len % 2 == 0)
+         {
+            ans++;
+            if(j - 1 >= 0 && j + 1 < n)
+            {
+               for(auto elem : a)
+               {
+                  if(elem != s[j - 1] && elem != s[j + 1]) s[j] = elem;
+               }
+            }
+            else if(j - 1 >= 0)
+            {
+               for(auto elem : a)
+               {
+                  if(elem != s[j - 1]) s[j] = elem;
+               }
+            }
+         }
+         j++;
+      }
+      i = j - 1;
+   }
+   cout << ans << endl << s << endl;
+}
+
+void solve1443B()
+{
+   ll n, a, b, ans = (ll)1e15; string s;
+   cin >> a >> b >> s;
+   int sz = s.size();
+   vector<pair<int, int>> segs;
+   for(int i = 0; i < sz; i++)
+   {
+      int x = -1, y = -1;
+      if(s[i] == '1')
+      {
+         x = i;
+         int j = i;
+         while(j < sz && s[j] == '1') j++;
+         y = j - 1;
+         i = j - 1;
+      }
+      if(x != -1 && y != -1) segs.push_back(make_pair(x, y));
+     
+   }
+   
+   //for(auto elem : segs) cout << "( "<<elem.first << " " << elem.second << " )"; cout << endl;
+   n = segs.size();
+   if(n <= 1) {cout << n * a << endl; return;}
+   
+   vector<ll> open(n - 1);
+   for(ll i = 0; i + 1 < n; i++) open[i] = abs(segs[i].second - segs[i + 1].first) - 1;
+   sort(open.begin(), open.end());
+   //for(auto elem : open) cout << elem << " "; cout << endl;
+   vector<ll> pref(n, 0);
+   for(ll i = 0; i < open.size(); i++) pref[i + 1] = pref[i] + open[i] * 1ll * b;
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   
+   for(int seg = n; seg >= 1; seg--)
+   {
+      int op = n - seg;
+      ll choice = seg * 1ll * a + pref[op];
+      //cout << choice << endl;
+      ans = min(ans, choice);
+   }
+   cout << ans << endl;
+}
+
+void solve1582C()
+{
+   int n; string s;
+   cin >> n >> s;
+   int ans = INT_MAX;
+   for(char c = 'a'; c <= 'z'; c++)
+   {
+      int cnt = 0, l = 0, r = n - 1;
+      bool f = true;
+      while(l < r)
+      {
+         if(s[l] == s[r])
+         {
+            l++; 
+            r--;
+         }
+         else
+         {
+            if(s[l] == c)
+            {
+               cnt++;
+               l++;
+            }
+            else if(s[r] == c)
+            {
+               cnt++;
+               r--;
+            }
+            else
+            {
+               f = false;
+               break;
+            }
+         }
+      }
+      //cout << (char) c << " " << cnt << " " << f << endl;
+      if(f == true) ans = min(ans, cnt);
+   }
+   
+   if(ans == INT_MAX) cout << -1 << endl;
+   else cout << ans << endl;
+}
+
+void solve1802B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   int i = 0, cnt = 0, bld = 0, single = 0, dbl = 0, emp = 0;
+   while(i < n && a[i] == 2) i++;
+   for(; i < n; i++)
+   {
+      if(a[i] == 1)
+      {
+         single++;
+         if(emp == 0) bld++;
+         else emp--;
+      }
+      else if(a[i] == 2)
+      {
+         cnt = single;
+         if(cnt % 2 == 0) 
+         {
+            single = 2;
+            dbl += cnt / 2 - 1;
+            emp = bld - dbl - single;
+         }
+         else
+         {
+            dbl += cnt / 2;
+            single = cnt % 2;
+            emp = bld - dbl - single;
+         }
+      }
+   }
+   cout << bld << endl;
+}
+
+void solve1802A()
+{
+   int n;
+   cin >> n;
+   int pos = 0, neg = 0;
+   for(int i = 1; i <= n; i++) 
+   {
+      int x;
+      cin >> x;
+      if(x < 0) neg++;
+      else pos++;
+   }
+   int cnt = 1;
+   for(int j = 1; j <= pos; j++)
+   {
+      cout << cnt << " ";
+      cnt++;
+   }
+   cnt -= 2;
+   for(int j = 1; j <= neg; j++)
+   {
+      cout << cnt << " ";
+      cnt--;
+   }
+   cout << endl;
+   cnt = 1;
+   int j;
+   for(j = 1; j <= 2 * neg; j++)
+   {
+      if(j % 2 == 1)cout << 1 << " ";
+      else cout << 0 << " ";
+   }
+   for(; j <= n; j++)
+   {
+      cout << cnt << " ";
+      cnt++;
+   }
+   cout << endl;
+}
 
 int main()
 { 
