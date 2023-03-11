@@ -11539,6 +11539,45 @@ void solve1802A()
    cout << endl;
 }
 
+void solve1553B()
+{
+   string s, t;
+   cin >> s >> t;
+   int sz = s.size();
+   int tz = t.size();
+   bool flag = false;
+   for(int i = 0; i < sz; i++)
+   {
+      if(s[i] != t[0]) continue;
+      for(int j = tz; j >= 0; j--)
+      {
+         string f;
+         int bak = tz - j;
+         int k, p;
+         if(i + j - 1 < sz)
+         {
+            for(k = i, p = 1; p <= j; k++, p++) f.push_back(s[k]);
+         }
+         else continue;
+         k -= 2;
+         if(k + 1 - bak >= 0)
+         {
+            for(int p = 1; p <= bak; p++, k--) f.push_back(s[k]);
+         }
+         else continue;
+         //cout << f << endl;
+         if(f == t)
+         {
+            flag = true;
+            break;
+         }
+      }
+      if(flag == true) break;
+   }
+   if(flag) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
