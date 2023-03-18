@@ -11578,6 +11578,236 @@ void solve1553B()
    else cout << "NO" << endl;
 }
 
+void solve1800E2()
+{
+   int n, k; string s, t;
+   cin >> n >> k >> s >> t;
+   vector<int> a(26, 0);
+   if(s == t) 
+   {
+      cout << "YES" << endl;
+      return;
+   }
+   for(int i = 0; i < n; i++) a[s[i] - 'a']++;
+   for(int i = 0; i < n; i++) a[t[i] - 'a']--;
+   for(int i = 0; i < 26; i++)
+   {
+      if(a[i] != 0)
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] != t[i] && i - k < 0 && i + k >= n)
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve1178B()
+{
+   string s, t;
+   cin >> s;
+   int n = (int)s.size();
+   bool flag = false;
+   for(int i = 0; i < n; i++)
+   {
+      if(s[i] == 'o')
+      {
+         if(flag == false) continue;
+         else t.push_back('o');
+      }
+      else if(s[i] == 'v')
+      {
+         if( (i >= 1 && s[i - 1] == 'v') || (i + 1 < n && s[i + 1] == 'v') ) 
+         {
+            flag = true;
+            t.push_back('v');
+         }
+      }
+   }
+   vector<pair<int, int>> segs;
+   n = t.size();
+   for(int i = 0; i < n; i++)
+   {
+      int x = -1, y = -1;
+      if(t[i] == 'v')
+      {
+         int j = i;
+         x = j;
+         while(j < n && t[j] == 'v') j++;
+         y = j - 1;
+         segs.push_back(make_pair(x, y));
+         i = j - 1;
+      }
+   }
+   //cout << t << endl;
+   //for(auto elem : segs) cout << "( "<<elem.first << " " << elem.second <<" )"; cout << endl;
+   ll total = 0;
+   for(auto elem : segs) total += elem.second - elem.first;
+   ll curr = 0, ans = 0;
+   for(int i = 0; i + 1 < (int)segs.size(); i++)
+   {
+      curr += segs[i].second - segs[i].first;
+      for(int j = segs[i].second + 1; j < segs[i + 1].first; j++)
+      {
+         ans = ans + 1ll * curr * (total - curr);
+      }
+   }
+   cout << ans << endl;
+}
+
+void solve1194C()
+{
+   string s, t, p;
+   cin >> s >> t >> p;
+   int sz = (int) s.size(), tz = (int)t.size(), pz = (int)p.size();
+   vector<int> a(26, 0);
+   int i = 0, j = 0;
+   bool flag = true;
+   while(i < sz)
+   {
+      if(s[i] != t[j])
+      {
+         while(j < tz && s[i] != t[j])
+         {
+            a[t[j] - 'a']++;
+            j++;
+         }
+         if(j == tz) 
+         {
+            flag = false;
+            break;
+         }
+      }
+      else 
+      {
+         i++;
+         j++;
+      }
+   }
+   while(j < tz) {a[t[j] - 'a']++; j++;}
+   for(int k = 0; k < pz; k++)
+   {
+      if(a[p[k] - 'a'] > 0) a[p[k] - 'a']--;
+   }
+   for(int k = 0; k < 26; k++)
+   {
+      if(a[k] > 0) flag = false;
+   }
+   if(flag == false) cout << "NO" << endl;
+   else cout << "YES" << endl;
+}
+
+void solve66A()
+{
+   string s;
+   cin >> s;
+   string l = "9223372036854775807";
+   int n = (int)s.size();
+   bool f = false;
+   if(n == 19)
+   {
+      for(int i = 0; i < 19; i++)
+      {
+         if(s[i] == l[i]) {continue;}
+         else if(s[i] > l[i]) {f = true; break;}
+         else {f = false; break;}
+      }
+   }
+   if(n > 19 || f == true) {cout << "BigInteger" << endl; return;}
+   
+   ll num = 0, mul = 1;
+   for(int i = n - 1; i >= 0; i--)
+   {
+      num += (s[i] - '0') * mul;
+      mul *= 10;
+   }
+   //cout << num << endl;
+   int leftmost = 0;
+   while(num > 0)
+   {
+      num = num >> 1;
+      leftmost++;
+   }
+   if(leftmost <= 7) {cout << "byte" << endl; return;}
+   if(leftmost <= 15) {cout << "short" << endl; return;}
+   if(leftmost <= 31) {cout << "int" << endl; return;}
+   if(leftmost <= 63) {cout << "long" << endl; return;}
+}
+
+void solve1421C()
+{
+   string s;
+   cin >> s;
+   int n = (int)s.size();
+   vector<pair<char, int>> a;
+   a.push_back(make_pair('R', n - 1));
+   n++;
+   a.push_back(make_pair('L', 2));
+   n++;
+   a.push_back(make_pair('R', 2));
+   n = n + n - 2;
+   a.push_back(make_pair('R', n - 1));
+   n++;
+   cout << 4 << endl;
+   for(auto elem : a) cout << elem.first << " " << elem.second << endl;
+}
+
+void solve1804C()
+{
+   ll n, x, p;
+   cin >> n >> x >> p;
+   ll need = (n - x) % n;
+   bool f = false;
+   for(ll i = 1; i <= min(p, 2 * n); i++)
+   {
+      ll force = i;
+      ll go = (force * 1ll * (force + 1)) / 2;
+      ll actual = go % n;
+      //cout <<go << " " <<actual << endl;
+      if(actual == need) f = true;
+   }
+   if(f) cout << "Yes" << endl;
+   else cout << "No" << endl;
+}
+
+void solve1806B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), positives;
+   int cnt0 = 0, cntpos = 0;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      if(a[i] == 0) cnt0++;
+      else {cntpos++; positives.push_back(a[i]);}
+   }
+   if(cntpos >= cnt0 - 1) {cout << 0 << endl; return;}
+   int sz = positives.size();
+   if(sz == 0) {cout << 1 << endl; return;}
+   sort(positives.begin(), positives.end());
+   reverse(positives.begin(), positives.end());
+   if(positives[0] > 1) cout << 1 << endl;
+   else cout << 2 << endl;
+}
+
+void solve1806A()
+{
+   int a, b, c, d;
+   cin >> a >> b >> c >> d;
+   int ver = d - b;
+   a += ver;
+   if(a < c || d < b) cout << -1 << endl;
+   else cout << ver + abs(c - a) << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
