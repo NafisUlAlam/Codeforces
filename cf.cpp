@@ -11808,6 +11808,177 @@ void solve1806A()
    else cout << ver + abs(c - a) << endl;
 }
 
+void solve525B()
+{
+   string s; int n;
+   cin >> s >> n;
+   vector<int> a((int)s.size(), 0);
+   for(int i = 0; i < n; i++) 
+   {
+      int x;
+      cin >> x;
+      a[x - 1]++;
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   int l = 0, r = (int)s.size() - 1, add = 0;
+   while(l <= r)
+   {
+      a[l] += add;
+      //cout << l << " " << a[l] << endl;
+      if(a[l] % 2 == 1) 
+      {
+         //cout << "swapping " << s[l] << " " << s[r] << endl;
+         swap(s[l], s[r]);
+      }
+      add = 0;
+      add += a[l];
+      l++;
+      r--;
+   }
+   cout << s << endl;
+}
+
+void solve1807D()
+{
+   ll n, q;
+   cin >> n >> q;
+   vector<ll> a(n + 1), pref(n + 1, 0), suff(n + 2, 0);
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> a[i];
+      pref[i] = pref[i - 1] + a[i];
+   }
+   ll total = pref[n];
+   for(ll i = n; i >= 1; i--) suff[i] = suff[i + 1] + a[i];
+   //for(auto elem : pref) cout << elem << " "; cout << endl;
+   //for(auto elem : suff) cout << elem << " "; cout << endl;
+   while(q--)
+   {
+      int l, r, k;
+      cin >> l >> r >> k;
+      ll cnt = r - l + 1;
+      cnt = cnt * 1ll * k;
+      total = suff[r + 1] + pref[l - 1] + cnt;
+      if(total % 2 == 1) cout << "YES" << endl;
+      else cout << "NO" << endl;
+   }
+   
+}
+
+void solve1807B()
+{
+   int n;
+   cin >> n;
+   ll odds = 0, evens = 0;
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      if(x % 2 == 1) odds += x;
+      else evens += x;
+   }
+   if(evens > odds) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1807C()
+{
+   int n; string s;
+   cin >> n >> s;
+   vector<vector<int>> a(26);
+   for(int i = 0; i < n; i++)a[s[i] - 'a'].push_back(i);
+   for(int i = 0; i < 26; i++)
+   {
+      bool odd = false, even = false;
+      for(auto elem : a[i])
+      {
+         if(elem % 2 == 1) odd = true;
+         else even = true;
+      }
+      if(odd && even)
+      {
+         cout << "NO" << endl;
+         return;
+      }
+   }
+   cout << "YES" << endl;
+}
+
+void solve1807A()
+{
+   int a, b, c;
+   cin >> a >> b >> c;
+   if(a + b == c) cout << '+' << endl;
+   else if(a - b == c) cout << '-' << endl;
+}
+
+void solve1807G1()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   if(a[0] > 1) {cout << "NO" << endl; return;}
+   ll curr = 1;
+   for(int i = 1; i < n; i++)
+   {
+      if(curr < a[i])
+      {
+         cout << "NO" << endl;
+         return;
+      }
+      curr += a[i];
+   }
+   
+   cout << "YES" << endl;
+}
+
+void solve1807G2()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   if(a[0] > 1) {cout << "NO" << endl; return;}
+   ll curr = 1;
+   for(int i = 1; i < n; i++)
+   {
+      if(curr < a[i])
+      {
+         cout << "NO" << endl;
+         return;
+      }
+      curr += a[i];
+   }
+   
+   cout << "YES" << endl;
+}
+
+void solve1807E()
+{
+   int n;
+   cin >> n;
+   vector<ll> a(n + 1);
+   for(ll i = 1; i <= n; i++) cin >> a[i];
+   int l = 1, r = n;
+   while(l < r)
+   {
+      int mid = (l + r) / 2;
+      cout << "? " << mid - l + 1 << " ";
+      for(int i = l; i <= mid; i++) cout << i << " "; cout << endl;
+      int m;
+      cin >> m;
+      int sum = 0;
+      for(int i = l; i <= mid; i++) sum += a[i];
+      if(sum == m) l = mid + 1;
+      else r = mid;
+   }
+   
+   cout << "! " << l << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
