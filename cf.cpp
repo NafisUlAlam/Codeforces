@@ -11979,6 +11979,42 @@ void solve1807E()
    cout << "! " << l << endl;
 }
 
+void solve697B()
+{
+   string s, t((int)1e5 + 30, '0');
+   cin >> s;
+   int move = 0, i = 0, n = (int) s.size(), right = -1;
+   while(i < n && s[i] != 'e') 
+   {
+      if(i > 1 && s[i] > '0') right = i;
+      t[i] = s[i];
+      i++;
+   }
+   if(right == -1 && s[0] == '0') {cout << 0 << endl; return;}
+   i++;
+   for(; i < n; i++) move = move * 10 + (s[i] - '0');
+   //cout << move << endl;
+   i = 1;
+   while(move > 0)
+   {
+      swap(t[i], t[i + 1]);
+      i++;
+      move--;
+   }
+   //cout << t << endl << t[i] << endl;
+   i++;
+   //cout << right << " " << i << endl;
+   t = t.substr(0, max(i, right + 1));
+   //cout << t << endl;
+   i = 0;
+   while(i < t.size() && t[i] == '0') i++;
+   if(i < t.size() && t[i] == '.') t = t.substr(i - 1);
+   else t = t.substr(i);
+   if(t.back() == '.') t.pop_back();
+   cout << t << endl;
+   //cout << t << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
