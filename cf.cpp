@@ -12015,6 +12015,228 @@ void solve697B()
    //cout << t << endl;
 }
 
+void solve954B()
+{
+   int n; string s;
+   cin >> n >> s;
+   int maxi = 1;
+   for(int i = 1; i <= n ; i++)
+   {
+      int j = 0, k = j + i, f = j + i;
+      while(j < f && k < n && s[j] == s[k])
+      {
+         //cout << j << " inside " << k << endl;
+         k++;
+         j++;
+      }
+      //cout << j << " outside " << k << endl;
+      if(j == i) maxi = max(maxi, i);
+   }
+   //cout << maxi << endl;
+   cout << n - maxi + 1 << endl;
+}
+
+void solve1648A()
+{
+   //each index has n + (n - i - 1) * i counts of segment
+   int n, m;
+   cin >> n >> m;
+   vector<vector<int>> rows(1e5 + 30), cols(1e5 + 30);
+   for(int i = 0; i < n; i++)
+   {
+      for(int j = 0; j < m; j++)
+      {
+         int x;
+         cin >> x;
+         rows[x].push_back(i);
+         cols[x].push_back(j);
+      }
+   }
+   for(int i = 0; i <(int) rows.size(); i++) sort(rows[i].begin(), rows[i].end());
+   for(int i = 0; i <(int) cols.size(); i++) sort(cols[i].begin(), cols[i].end());
+   /*for(int i = 0; i < rows.size(); i++)
+   {
+      cout << i << " rows ";
+      for(int j = 0; j < (int)rows[i].size(); j++) cout << rows[i][j] << " "; cout << endl;
+   }
+   for(int i = 0; i < cols.size(); i++)
+   {
+      cout << i << " cols ";
+      for(int j = 0; j < (int)cols[i].size(); j++) cout << cols[i][j] << " "; cout << endl;
+   }*/
+   ll sum = 0;
+   for(int i = 0; i < (int)rows.size(); i++)
+   {
+      n = rows[i].size();
+      for(int j = 0; j < n; j++)
+      {
+         sum += (2 * j - n + 1) * 1ll * rows[i][j];  
+      }
+   }
+   for(int i = 0; i < (int)cols.size(); i++)
+   {
+      n = cols[i].size();
+      for(int j = 0; j < n; j++)
+      {
+         sum += (2 * j - n + 1) * 1ll * cols[i][j];  
+      }
+   }
+   cout << sum << endl;
+}
+
+void solve1316B()
+{
+   int n; string s;
+   cin >> n >> s;
+   string t(50002, 'z');
+   int mini = INT_MAX;
+   bool swp = true;
+   for(int k = n; k >= 1; k--)
+   {
+      string p = s.substr(k - 1);
+      string q = s.substr(0, k - 1);
+      if(swp == true)
+      {
+         reverse(q.begin(), q.end());
+         swp = false;
+      }
+      else swp = true;
+      p += q;
+      if(p <= t) 
+      {
+         if(p == t) mini = min(mini, k);
+         else mini = k;
+         t = p;
+      }
+   }
+   cout << t << endl << mini << endl;
+}
+
+void solve1251B()
+{
+   ll n;
+   cin >> n;
+   ll cnt0 = 0, cnt1 = 0, ans = 0;
+   vector<int> a(n, 0);
+   for(int i = 0; i < n; i++)
+   {
+      string s;
+      cin >> s;
+      for(int j = 0; j < s.size(); j++)
+      {
+         a[i] = s.size();
+         if(s[j] == '0') cnt0++;
+         else cnt1++;
+      }
+   }
+   sort(a.begin(), a.end());
+   int i = 0;
+   while(cnt0 > 0)
+   {
+      if(cnt0 >= 2) 
+      {
+         int j = 0;
+         while(j < n && a[j] < 2) j++;
+         if(j < n) a[j] -= 2;
+         else
+         {
+            j = 0;
+            while(j < n && a[j] <= 0) j++;
+            a[j]--;
+            j = 0;
+            while(j < n && a[j] <= 0) j++;
+            a[j]--;
+            
+         }
+         cnt0 -= 2;
+      }
+      else if(cnt0 == 1)
+      {
+         int j = 0;
+         while(j < n && a[j] % 2 == 0) j++;
+         if(j < n) a[j]--;
+         cnt0--;
+      }
+   }
+   //for(auto elem : a) cout << elem << " "; cout << endl;
+   while(cnt1 > 0)
+   {
+      if(cnt1 >= 2) 
+      {
+         int j = 0;
+         while(j < n && a[j] < 2) j++;
+         if(j < n) a[j] -= 2;
+         else
+         {
+            j = 0;
+            while(j < n && a[j] <= 0) j++;
+            a[j]--;
+            j = 0;
+            while(j < n && a[j] <= 0) j++;
+            a[j]--;
+         }
+         cnt1 -= 2;
+      }
+      else if(cnt1 == 1)
+      {
+         int j = 0;
+         while(j < n && a[j] % 2 == 0) j++;
+         if(j < n) a[j]--;
+         cnt1--;
+      }
+   }
+   for(int i = 0; i < n; i++) if(a[i] == 0) ans++;
+   cout << ans << endl;
+}
+
+void solve1808B()
+{
+   ll n, m, sum = 0;
+   cin >> n >> m;
+   vector<vector<ll>> a(n, vector<ll> (m));
+   for(ll i = 0; i < n; i++)
+   {
+      for(ll j = 0; j < m; j++) cin >> a[i][j];
+   }
+   
+   for(ll col = 0; col < m; col++)
+   {
+      vector<ll> sorted(n);
+      for(ll row = 0; row < n; row++)
+      {
+         sorted[row] = a[row][col];
+      }
+      sort(sorted.begin(), sorted.end());
+      reverse(sorted.begin(), sorted.end());
+      for(ll i = 0; i < n; i++)
+      {
+         ll curr = sorted[i];
+         ll add = curr * 1ll * (n - 1 - i);
+         ll sub = curr * 1ll * i;
+         sum += add - sub;
+      }
+   }
+   cout << sum << endl;
+}
+
+void solve1808A()
+{
+   int l, r, ans, maxi = INT_MIN;
+   cin >> l >> r;
+   for(int i = l; i <= min(l + 100, r); i++)
+   {
+      string s = to_string(i);
+      sort(s.begin(), s.end());
+      int diff = (s.back() - '0') - (s.front() - '0');
+      if(diff > maxi) 
+      {
+         maxi = diff;
+         ans = i;
+      }
+   }
+   cout << ans << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
