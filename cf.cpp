@@ -12237,6 +12237,107 @@ void solve1808A()
    cout << ans << endl;
 }
 
+void solve1624C()
+{
+   int n, x;
+   cin >> n;
+   vector<vector<int>> a(n);
+   for(int i = 0; i < n; i++)
+   {
+      cin >> x;
+      while(x > 0)
+      {
+         if(x <= n) a[i].push_back(x);
+         x /= 2;
+      }
+      //reverse(a[i].begin(), a[i].end());
+   }
+   sort(a.begin(), a.end(), [](vector<int>& x, vector<int>& y)
+   {
+      if((int)x.size() < (int)y.size()) return true;
+      else return false;
+   });
+   vector<bool> flags(n + 1, false);
+   for(int i = 0; i < n; i++)
+   {
+      for(int j = 0; j < (int)a[i].size(); j++)
+      {
+         if(flags[a[i][j]] == false) 
+         {
+            //cout << a[i][j] << endl;
+            flags[a[i][j]] = true;
+            break;
+         }
+      }
+   }
+   bool ans = true;
+   for(int i = 1; i <= n; i++) ans &= flags[i];
+   if(ans) cout << "YES" <<endl;
+   else cout << "NO" << endl;
+}
+
+void solve1452B()
+{
+   ll n, sum = 0, ans;
+   cin >> n;
+   vector<ll> a(n);
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      sum += a[i];
+   }
+   sort(a.begin(), a.end());
+   ll maxineed = (sum + n - 2) / (n - 1);
+   ll needsum = maxineed * (n - 1);
+   //cout << "maxineed " << maxineed << " needsum " << needsum << endl;
+   ans = needsum - sum;
+   sum += ans;
+   //cout << "sum "<< sum << " ans " << ans << endl;
+   if(maxineed < a.back()) ans += a.back() * 1ll * (n - 1) - sum; 
+   cout << ans << endl;
+}
+
+void solve463B()
+{
+   int n, x, maxi = INT_MIN;
+   cin >> n;
+   for(int i = 1; i <= n; i++)
+   {
+      cin >> x;
+      maxi = max(maxi, x);
+   }
+   cout << maxi << endl;
+}
+
+void solve1370B()
+{
+   int n, x;
+   cin >> n;
+   vector<int> odds, evens;
+   for(int i = 1; i <= 2 * n; i++)
+   {
+      cin >> x;
+      if(x % 2 == 1) odds.push_back(i);
+      else evens.push_back(i);
+   }
+   if(odds.size() < evens.size()) swap(odds, evens);
+   for(int i = 0; i + 1 < (int)odds.size(); i += 2) 
+   {
+      if(odds.size() % 2 == 0 && i == (int)odds.size() - 2) continue;
+      cout << odds[i] << " " << odds[i + 1] << endl;
+   }
+   for(int i = 0; i + 1 < (int)evens.size(); i += 2) cout << evens[i] << " " << evens[i + 1] << endl;
+}
+
+void solve1463A()
+{
+   int a, b, c;
+   cin >> a >> b >> c;
+   int mini = min(a, min(b, c));
+   if((a + b + c ) % 9 == 0 && mini >= (a + b + c) / 9) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
