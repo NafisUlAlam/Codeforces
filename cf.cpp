@@ -12338,6 +12338,32 @@ void solve1463A()
    else cout << "NO" << endl;
 }
 
+void solve1628A()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), cnt(n + 10, 0), ans;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      cnt[a[i]]++;
+   }
+   set<int> st;
+   int mex = 0;
+   for(int i = 0; i < n; i++)
+   {
+      st.insert(a[i]);
+      cnt[a[i]]--;
+      while(st.find(mex) != st.end()) mex++;
+      if(cnt[mex] > 0) continue;
+      st.clear();
+      ans.push_back(mex);
+      mex = 0;
+   }
+   cout << ans.size() << endl;
+   for(auto e : ans) cout << e << " "; cout << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
