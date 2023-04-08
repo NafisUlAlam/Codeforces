@@ -12449,6 +12449,67 @@ void solve1511C()
    cout << endl;
 }
 
+void solve1519C()
+{
+   ll n;
+   cin >> n;
+   map<ll, vector<ll>> a;
+   vector<ll> uni(n), skill(n);
+   for(int i = 0; i < n; i++) cin >> uni[i];
+   for(int i = 0; i < n; i++) cin >> skill[i];
+   for(int i = 0; i < n; i++) a[uni[i] - 1].push_back(skill[i]);
+   for(auto &e : a) {sort(e.second.begin(), e.second.end()); reverse(e.second.begin(), e.second.end());}
+   for(auto it = a.begin(); it != a.end(); it++)
+   {
+      auto it2 = it->second.begin(), it3 = it->second.begin();
+      it2++;
+      for(it2; it2 != it->second.end(); it2++, it3++)
+      {
+         (*it2) += (*it3);
+      }
+   }
+   /*for(auto it = a.begin(); it != a.end(); it++)
+   {
+      for(auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+      {
+         cout << *it2 << " ";
+      }
+      cout << endl;
+   }*/
+   vector<vector<ll>> b;
+   for(auto e : a)
+   {
+      b.push_back(e.second);
+   }
+   vector<ll> ans(n + 1, 0);
+   for(int k = 0; k < b.size(); k++)
+   {
+      for(int j = 1; j <= b[k].size(); j++)
+      {
+         ans[j] += b[k][(b[k].size() / j) * j - 1];
+      }
+   }
+   for(int i = 1; i <= n; i++) cout << ans[i] << " "; cout << endl;
+}
+
+void solve485A()
+{
+   int a, m;
+   cin >> a >> m;
+   unordered_set<int> rem;
+   bool f = false;
+   while(true)
+   {
+      //for(auto e : rem) cout << e << " "; cout << endl;
+      if(a % m == 0){f = true; break;}
+      if(rem.find(a % m) == rem.end())rem.insert(a % m);
+      else break;
+      a += a % m;
+   }
+   if(f == true) cout << "Yes" << endl;
+   else cout << "No" << endl;
+}
+
 void solve1443C()
 {
    ll n, sum = 0;
