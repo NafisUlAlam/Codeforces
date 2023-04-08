@@ -12364,6 +12364,182 @@ void solve1628A()
    for(auto e : ans) cout << e << " "; cout << endl;
 }
 
+void solve1551B2()
+{
+   int n, k;
+   cin >> n >> k;
+   vector<int> a(n), cnt(n + 1, 0);
+   vector<pair<int, int>> b;
+   for(int i = 0; i < n; i++)
+   {
+      cin >> a[i];
+      cnt[a[i]]++;
+   }
+   for(int i = 0; i <= n; i++)
+   {
+      if(cnt[i] > 0) b.push_back(make_pair(i, cnt[i]));
+   }
+   cnt.clear();
+   //for(auto e : b) cout << e.first <<  " " << e.second << " )"; cout << endl;
+   vector<set<int>> sets(k);
+   int j = 0;
+   for(int i = 0; i < b.size(); i++)
+   {
+      int elem = b[i].first;
+      int ct = b[i].second;
+      for(int ii = 0; ii < min(k, ct); ii++)
+      {
+         sets[j].insert(elem);
+         j = (j + 1) % k;
+      }
+   }
+   int p = INT_MAX;
+   for(int i = 0; i < k; i++) p = min(p, (int)sets[i].size());
+   for(int i = k - 1; i >= 0; i--)
+   {
+      while((int)sets[i].size() > p)
+      {
+         auto it = sets[i].end();
+         it--;
+         sets[i].erase(it);
+      }
+   }
+   map<int, set<int>> mp;
+   for(int i = 0; i < k; i++)
+   {
+      for(auto e : sets[i]) mp[e].insert(i + 1); 
+   }
+   for(int i = 0; i < n; i++)
+   {
+      int elem = a[i];
+      if(mp[elem].size() > 0)
+      {
+         auto it = mp[elem].begin();
+         cout << *it << " ";
+         mp[elem].erase(it);
+      }
+      else cout << 0 << " ";
+   }
+   cout << endl;
+}
+
+void solve1511C()
+{
+   int n, q;
+   cin >> n >> q;
+   map<int, int> mp;
+   for(int i = 1; i <= n; i++)
+   {
+      int x;
+      cin >> x;
+      if(mp.count(x) == 0) mp[x] = i;
+   }
+   while(q--)
+   {
+      int x;
+      cin >> x;
+      int ans = mp[x];
+      cout << ans << " ";
+      for(auto& e : mp)
+      {
+         if(e.second < ans) e.second++;
+         else if (e.second == ans) e.second = 1;
+      }
+   }
+   cout << endl;
+}
+
+void solve1443C()
+{
+   ll n, sum = 0;
+   cin >> n;
+   vector<ll> a(n), b(n);
+   for(auto &e : a) cin >> e;
+   for(auto &e : b) cin >> e;
+   vector<pair<ll, ll>> c(n);
+   for(int i = 0; i < n; i++) c[i] = make_pair(a[i], b[i]);
+   sort(c.begin(), c.end());
+   //for(auto e : c) cout << "( " << e.first << " " << e.second << ")"; cout << endl;
+   int mark = -1;
+   for(int i = n - 1; i >= 0; i--)
+   {
+      if(c[i].second + sum <= c[i].first)
+      {
+         sum += c[i].second;
+      }
+      else {mark = i; break;}
+   }
+   if(mark == -1) cout << sum << endl;
+   else cout << max(c[mark].first, sum) << endl;
+}
+
+void solve1380B()
+{
+   string s, ans;
+   cin >> s;
+   int n = s.size(), cntp = 0, cnts = 0, cntr = 0;
+   for(auto e : s) 
+   {
+      if(e == 'R') cntr++;
+      else if(e == 'S') cnts++;
+      else cntp++;
+   }
+   int maxi = max(cntr, max(cntp, cnts));
+   if(maxi == cntr) for(int i = 0; i < n; i++) ans.push_back('P');
+   else if(maxi == cntp) for(int i = 0; i < n; i++) ans.push_back('S');
+   else for(int i = 0; i < n; i++) ans.push_back('R');
+   cout << ans << endl;
+}
+
+void solve1428C()
+{
+   string s;
+   cin >> s;
+   vector<int> a(2, 0);
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(s[i] == 'A') a[0]++;
+      else
+      {
+         if(a[0] > 0) a[0]--;
+         else if(a[1] > 0) a[1]--;
+         else a[1]++;
+      }
+   }
+   cout << a[0] + a[1] << endl;
+}
+
+void solve1492B()
+{
+   int n;
+   cin >> n;
+   set<int> st;
+   vector<int> a(n), b;
+   for(int i = 1; i <= n; i++) st.insert(i);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   int i = n - 1;
+   while(st.size() > 0)
+   {
+      auto it = st.end();
+      it--;
+      int fi = *it;
+      int cnt = 0;
+      for(; i >= 0; i--)
+      {
+         cnt++;
+         b.push_back(a[i]);
+         st.erase(st.find(a[i]));
+         if(a[i] == fi)
+         {
+            reverse(b.end() - cnt, b.end());
+            i--;
+            break;
+         }
+      }
+   }
+   for(auto e : b) cout << e << " "; cout << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
