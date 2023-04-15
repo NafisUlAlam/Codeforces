@@ -12601,6 +12601,230 @@ void solve1492B()
    for(auto e : b) cout << e << " "; cout << endl;
 }
 
+
+void solve427B()
+{
+   int n, t, c, ans = 0, cnt = 0;
+   cin >> n >> t >> c;
+   vector<int> a(n);
+   for(auto &e : a) cin >> e;
+   for(int i = 0; i < c; i++) if(a[i] > t) cnt++;
+   if(cnt == 0) ans++;
+   for(int i = c; i < n; i++)
+   {
+      if(a[i] > t) cnt++;
+      if(a[i - c] > t) cnt--;
+      if(cnt == 0) ans++;
+   }
+   cout << ans << endl;
+}
+
+void solve1213B()
+{
+   int n, ans = 0;
+   cin >> n;
+   vector<int> a(n), st;
+   for(int i = 0; i < n; i++) cin >> a[i];
+   for(int i = n - 1; i >= 0; i--)
+   {
+      if(i == n - 1 || st.size() == 0) st.push_back(a[i]);
+      else
+      {
+         if(a[i] > st.back()) ans++;
+         else if (a[i] < st.back())
+         {
+            st.pop_back();
+            st.push_back(a[i]);
+         }
+      }
+   }
+   cout << ans << endl;
+}
+
+
+
+void solve1816B()
+{
+   int n;
+   cin >> n;
+   int big = 2 * n, small = 1;
+   vector<vector<int>> a(2, vector<int>(n));
+   a[0][0] = big, a[1][n - 1] = big - 1;
+   big = n + 1;
+   for(int i = 1; i < n; i += 2)
+   {
+      a[0][i] = small;
+      small++;
+      a[1][i - 1] = small;
+      small++;
+   }
+   for(int i = 2; i < n; i += 2)
+   {
+      a[0][i] = big;
+      big++;
+      a[1][i - 1] = big;
+      big++;
+   }
+   for(auto e : a)
+   {
+      for(auto e2 : e) cout << e2 << " "; cout << endl;
+   }
+   
+}
+
+void solve1816C()
+{
+   ll n;
+   cin >> n;
+   vector<ll> a(n);
+   for(auto &e : a) cin >> e;
+   for(ll i = 1; i + 1 < n; i++)
+   {
+      //cout << i << endl;
+      if(a[i - 1] > a[i])
+      {
+         ll diff = a[i - 1] - a[i];
+         a[i] += diff;
+         a[i + 1] += diff;
+      }
+   }
+   //for(auto e : a) cout << e << " "; cout << endl;
+   for(int i = n - 2; i - 1 >= 0; i--)
+   {
+      if(a[i + 1] < a[i])
+      {
+         ll diff = a[i] - a[i + 1];
+         a[i] -= diff;
+         a[i - 1] -= diff;
+      }
+   }
+   //for(auto e : a) cout << e << " "; cout << endl;
+   if(is_sorted(a.begin(), a.end())) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve129A()
+{
+   int n, sum = 0, e = 0, o = 0;
+   cin >> n;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) 
+   {
+      cin >> a[i];
+      sum += a[i];
+      if(a[i] % 2 == 0) e++;
+      else o++;
+   }
+   if(sum % 2 == 0) cout << e << endl;
+   else cout << o << endl;
+}
+
+void solve1701C()
+{
+   ll n, m, x;
+   cin >> n >> m;
+   vector<ll> mp(n + 1, 0);
+   multiset<ll> st;
+   for(int i = 0; i < m; i++)
+   {
+      cin >> x;
+      mp[x]++;
+   }
+   for(int i = 1; i <= n; i++) st.insert(mp[i]);
+   while(true)
+   {
+      //for(auto e : st) cout << e << " "; cout << endl;
+      auto it = st.begin();
+      auto it2 = st.end();
+      it2--;
+      ll mini = *it;
+      ll maxi = *it2;
+      if(maxi - mini >= 3)
+      {
+         mini += 2;
+         maxi -= 1;
+         st.erase(it);
+         st.erase(it2);
+         st.insert(mini);
+         st.insert(maxi);
+      }
+      else break;
+   }
+   auto it = st.end();
+   it--;
+   cout << *it << endl;
+}
+
+void solve267A()
+{
+   int a, b, ans = 0;
+   cin >> a >> b;
+   if(a < b) swap (a, b);
+   while(b > 0)
+   {
+      ans += a / b;
+      int rem = a % b;
+      a = rem;
+      swap(a, b);
+   }
+   cout << ans << endl;
+}
+
+void solve816B()
+{
+   ll n, k, q;
+   cin >> n >> k >> q;
+   vector<ll> a(200000 + 10, 0);
+   for(int i = 0; i < n; i++)
+   {
+      int x, y;
+      cin >> x >> y;
+      a[x]++;
+      a[y + 1]--;
+   }
+   for(int i = 1; i < a.size(); i++) a[i] += a[i - 1];
+   for(int i = 1; i < a.size(); i++) {if(a[i] >= k) a[i] = 1; else a[i] = 0;}
+   for(int i = 1; i < a.size(); i++) a[i] += a[i - 1];
+   while(q--)
+   {
+      int x, y;
+      cin >> x >> y;
+      cout << a[y] - a[x - 1] << endl;
+   }
+}
+
+void solve1820B()
+{
+   string s;
+   cin >> s;
+   int cnt = 0, n = s.size();
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(s[i] == '1') cnt++;
+   }
+   if(cnt == n)
+   {
+      cout << n * 1ll * n << endl;
+      return;
+   }
+   s += s;
+   ll maxi = 0;
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(s[i] == '0') continue;  
+      else
+      {
+         int j = i;
+         while(j < s.size() && s[j] == '1') j++;
+         maxi = max(maxi, (ll)j - i);
+         i = j;
+      }
+   }
+   //cout << maxi << endl;
+   ll ans = ((maxi + 1) / 2) * 1ll * ( (maxi + 1) - ((maxi + 1) / 2));
+   cout << ans << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
