@@ -12825,6 +12825,33 @@ void solve1820B()
    cout << ans << endl;
 }
 
+void solve1573B()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n), b(n);
+   map<int, int> omp, emp;
+   for(int i = 0; i < n; i++) {cin >> a[i]; omp[a[i]] = i;}
+   for(int i = 0; i < n; i++) {cin >> b[i]; emp[b[i]] = i;}
+   if(a[0] < b[0]) {cout << 0 << endl; return;}
+   int curr_even = 2, curr_odd = 1, mini = INT_MAX, total = INT_MAX;
+   while(curr_even <= 2 * n)
+   {
+      int even_index = emp[curr_even];
+      int even_contribution = even_index;
+      int odd_index = omp[curr_odd];
+      mini = min(mini, odd_index);
+      int odd_contribution = mini;
+      total = min(total, odd_contribution + even_contribution);
+      //cout << curr_even << " " << even_contribution << endl;
+      //cout << curr_odd << " " << odd_contribution << endl;
+      //cout << total << endl;
+      curr_even += 2;
+      curr_odd += 2;
+   }
+   cout << total << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
