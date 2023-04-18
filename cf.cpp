@@ -12851,6 +12851,63 @@ void solve1573B()
    }
    cout << total << endl;
 }
+void solve26B()
+{
+   string s; ll ans = 0;
+   cin >> s;
+   vector<char> a;
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(s[i] == '(') a.push_back('(');
+      else
+      {
+         if(a.size() > 0 && a.back() == '(') {ans += 2; a.pop_back();}
+      }
+   }
+   cout << ans << endl;
+}
+
+void solve501B()
+{
+   int n;
+   cin >> n;
+   map<string, string> mp;
+   for(int i = 0; i < n; i++)
+   {
+      string old, nw;
+      cin >> old >> nw;
+      bool f = false;
+      for(auto &e : mp)
+      {
+         if(e.second == old) {e.second = nw; f = true; break;}
+      }
+      if(f == false) mp[old] = nw;
+   }
+   cout << mp.size() << endl;
+   for(auto e : mp) cout << e.first << " " << e.second << endl; 
+}
+
+void solve260A()
+{
+   ll a, b, n;
+   cin >> a >> b >> n;
+   a = a * 10ll;
+   bool f = false;
+   for(int digit = 0; digit <= 9; digit++)
+   {
+      if( (a + digit) % b == 0)
+      {
+         a += digit;
+         f = true;
+         break;
+      }
+   }
+   if(f == false) {cout << -1 << endl; return;}   
+   string ans = to_string(a);
+   for(int i = 1; i <= n - 1; i++) ans.push_back('0');
+   cout << ans;
+}
+
 
 int main()
 { 
