@@ -12908,6 +12908,47 @@ void solve260A()
    cout << ans;
 }
 
+void solve363C()
+{
+   string s;
+   cin >> s;
+   vector<pair<char, int>> a;
+   bool f = false;
+   for(int i = 0; i < s.size(); i++)
+   {
+      if(a.size() == 0)
+      {
+         a.push_back(make_pair(s[i], 1));
+      }
+      else
+      {
+         char& c = a.back().first;
+         int& cnt = a.back().second;
+         if(a.size() >= 2)
+         {
+            if(a[a.size() - 2].second == 2) f = true;
+            else f = false;
+         }
+         if(s[i] == c)
+         {
+            if(cnt == 1)
+            {
+               if(f == true) {f = false; continue;}
+               else
+               {
+                  a.push_back(make_pair(s[i], 2));
+                  f = true;
+               }
+            }
+         }
+         else
+         {
+            a.push_back(make_pair(s[i], 1));
+         }
+      }
+   }
+   for(int i = 0; i < (int)a.size(); i++) cout << a[i].first; cout << endl;
+} 
 
 int main()
 { 
