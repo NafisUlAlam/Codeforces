@@ -12950,6 +12950,173 @@ void solve363C()
    for(int i = 0; i < (int)a.size(); i++) cout << a[i].first; cout << endl;
 } 
 
+void solve651A()
+{
+   int a, b;
+   cin >> a >> b;
+   if(a < b) swap(a, b);
+   if(a == b && a == 1) {cout << 0 << endl; return;}
+   if( (a - b) % 3 == 0) cout << a + b - 3 << endl;
+   else cout << a + b - 2 << endl;
+}
+
+void solve544B()
+{
+   int n, k;
+   cin >> n >> k;
+   if(k > (n * n + 1) / 2) {cout << "NO" << endl; return;}
+   cout << "YES" << endl;
+   for(int i = 1; i <= n; i++)
+   {
+      for(int j = 1; j <= n; j++)
+      {
+         if((i + j) % 2 == 0 && k > 0)
+         {
+            cout << 'L';
+            k--;
+         }
+         else cout << 'S';
+      }
+      cout << endl;
+   }
+}
+
+
+void solve1579D()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n + 1, 0);
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   set<pair<int, int>> st;
+   for(int i = 1; i <= n; i++)
+   {
+      if(a[i] > 0)st.insert(make_pair(a[i], i));
+   }
+   vector<pair<int, int>> ans;
+   while(st.size() >= 2)
+   {
+      auto it1 = st.end();
+      auto it2 = it1;
+      it1--;
+      it2--; it2--;
+      int maxi = it1->first;
+      int maxi_index = it1->second;
+      int second_maxi = it2->first;
+      int second_index = it2->second;
+      st.erase(it1); st.erase(it2);
+      ans.push_back(make_pair(maxi_index, second_index));
+      maxi -= 1;
+      second_maxi -= 1;
+      if(maxi > 0)st.insert(make_pair(maxi, maxi_index));
+      if(second_maxi > 0)st.insert(make_pair(second_maxi, second_index));
+   }
+   cout << ans.size() << endl;
+   for(auto e : ans) cout << e.first << " " << e.second << endl;
+}
+
+void solve709A()
+{
+   ll n, b, d;
+   cin >> n >> b >> d;
+   vector<int> a(n);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   ll cnt = 0, sum = 0;
+   for(int i = 0; i < n; i++)
+   {
+      if(a[i] <= b) sum += a[i];
+      if(sum > d) {cnt++; sum = 0;}
+   }
+   cout << cnt << endl;
+}
+
+void solve175B()
+{
+   int n;
+   cin >> n;
+   map<string, int> mp;
+   for(int i = 0; i < n; i++)
+   {
+      string s; int x;
+      cin >> s >> x;
+      if(mp.count(s) == 0) mp[s] = x;
+      else mp[s] = max(x, mp[s]);
+   } 
+   int total = mp.size();
+   cout << total << endl;
+   for(auto it = mp.begin(); it != mp.end(); it++)
+   {
+      int cnt = 0;
+      for(auto it2 = mp.begin(); it2 != mp.end(); it2++)
+      {
+         //if(it == it2) continue;
+         if(it->second >= it2->second) cnt++;
+      }
+      //cout << it->first << " " << cnt << endl;
+      int me = cnt;
+      string ans;
+      if(me * 100 >= total * 99) ans = "pro";
+      else if(me * 100 >= total * 90) ans = "hardcore";
+      else if(me * 100 >= total * 80) ans = "average";
+      else if(me * 100 >= total * 50) ans = "random";
+      else ans = "noob";
+      cout << it->first << " " << ans << endl;
+   }
+}
+
+void solve1270C()
+{
+   ll n, sum = 0, xxor = 0;
+   cin >> n;
+   for(int i = 1; i <= n; i++)
+   {
+     ll x;
+     cin >> x;
+     sum += x;
+     xxor ^= x;
+   }
+   vector<ll> ans;
+   ans.push_back(xxor);
+   sum += xxor;
+   xxor ^= xxor;
+   ans.push_back(sum);
+   cout << ans.size() << endl;
+   for(auto e : ans) cout << e << " "; cout << endl;
+}
+
+void solve335A()
+{
+   string s; int n, uni = 0;
+   cin >> s >> n;
+   vector<int> a(26, 0);
+   for(int i = 0; i < (int)s.size(); i++) 
+   {
+      a[s[i] - 'a']++;
+      if(a[s[i] - 'a'] == 1) uni++;
+   }
+   if(uni > n) {cout << -1 << endl; return;}
+   //if(n >= (int)s.size()) {cout << 1 << endl << s << endl; return;}
+   int ans = 0; string output;
+   for(int k = 1; k <= 1000; k++)
+   {
+      int sum = 0;
+      for(int j = 0; j < 26; j++)
+      {
+         sum += (a[j] + k - 1)/ k;
+      }
+      if(sum <= n) {ans = k; break;}
+   }
+   for(int i = 0; i < 26; i++)
+   {
+      for(int j = 1; j <= (a[i] + ans - 1) / ans; j++)
+      {
+         output.push_back(i + 'a');
+      }
+   }
+   for(int i = (int)output.size() + 1; i <= n; i++) output.push_back('a');
+   cout << ans << endl << output << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
