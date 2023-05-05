@@ -13117,6 +13117,132 @@ void solve335A()
    cout << ans << endl << output << endl;
 }
 
+void solve295A()
+{
+   ll n, m, k, x, y, d2;
+   cin >> n >> m >> k;
+   vector<ll> a(n + 2), c(m + 2, 0), d(n + 2, 0);
+   vector<pair<pair<ll, ll>, ll>> b(m + 2);
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   for(int i = 1; i <= m; i++)
+   {
+      cin >> x >> y >> d2;
+      b[i] = make_pair(make_pair(x, y), d2);
+   }
+   for(int i = 1; i <= k; i++)
+   {
+      cin >> x >> y;
+      c[x]++;
+      c[y + 1]--;
+   }
+   for(int i = 1; i < m + 2; i++) c[i] += c[i - 1];
+   //for(auto e : c) cout << e << " "; cout << endl;
+   for(int i = 1; i <= m; i++)
+   {
+      d[b[i].first.first] += (c[i] * 1ll * b[i].second);
+      d[b[i].first.second + 1] -= (c[i] * 1ll * b[i].second);
+   }
+   for(int i = 1; i <= n; i++) d[i] += d[i - 1];
+   for(int i = 1; i <= n; i++) cout << a[i] + 0ll + d[i] << " "; cout << endl;
+}
+
+void solve1133C()
+{
+   int n;
+   cin >> n;
+   vector<int> a(n);
+   for(auto &e : a) cin >> e;
+   sort(a.begin(), a.end());
+   int l = 0, r = 0, ans = 0;
+   for(r = 0; r < n; r++)
+   {
+      while(a[r] - a[l] > 5) l++;
+      ans = max(ans, r - l + 1);
+   }
+   cout << ans << endl;
+}
+
+void solve911B()
+{
+   int n, a, b, ans = 0;
+   cin >> n >> a >> b;
+   for(int i = 1; i <= n - 1; i++)
+   {
+      ans = max(ans, min(a / i, b /(n - i)));
+   }
+   cout << ans << endl;
+}
+
+void solve1818B()
+{
+   int n;
+   cin >> n;
+   if(n == 1) {cout << 1 << endl; return;}
+   if(n % 2 == 1) {cout << -1 << endl; return;}
+   int o = 1, e = 2;
+   for(int i = 0; i < n; i++)
+   {
+      if(i % 2 == 0) {cout << e << " "; e += 2;}
+      else {cout << o << " "; o += 2;}
+   }
+   cout << endl;
+}
+
+void solve1183C()
+{
+   ll charge, turns, a, b, ans = -1;
+   cin >> charge >> turns >> a >> b;
+   ll lo = 0, hi = turns;
+   while(lo <= hi)
+   {
+      ll mid = (lo + hi) / 2;
+      ll first = mid;
+      ll second = turns - mid;
+      if(first * 1ll * a < charge)
+      {
+         ll rem = charge - first * 1ll * a;
+         if(second * 1ll * b < rem)
+         {
+            ans = mid;
+            lo = mid + 1;
+         }
+         else hi = mid - 1;
+      }
+      else hi = mid - 1;
+   }
+   cout << ans << endl;
+}
+
+void solve1197C()
+{
+   ll n, k;
+   cin >> n >> k;
+   vector<int> a(n), b(n - 1);
+   for(auto &e : a) cin >> e;
+   for(int i = 0; i + 1 < n; i++) b[i] = a[i] - a[i + 1];
+   sort(b.begin(), b.end());
+   ll ans = a[n - 1] - a[0];
+   for(int i = 0; i <= k - 2; i++) ans += b[i];
+   cout << ans << endl;
+}
+
+void solve682B()
+{
+   int n;
+   cin >> n;
+   set<int> st;
+   vector<int> a(n + 1);
+   for(int i = 1; i <= n; i++) st.insert(i);
+   for(int i = 1; i <= n; i++) cin >> a[i];
+   sort(a.begin(), a.end());
+   for(int i = 1; i <= n; i++)
+   {
+      if(a[i] >= *st.begin()) st.erase(st.begin());
+   }
+   if(st.size() == 0) cout << n + 1 << endl;
+   else cout << *st.begin() << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
