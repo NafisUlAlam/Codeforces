@@ -13243,6 +13243,152 @@ void solve682B()
    else cout << *st.begin() << endl;
 }
 
+void solve1437B()
+{
+   int n, z = 0, o = 0; string s;
+   cin >> n >> s;
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(s[i] == s[i + 1] && s[i] == '0') z++;
+      else if(s[i] == s[i + 1] && s[i] == '1') o++;
+   }
+   cout << max(o, z) << endl;
+}
+
+void solve1392C()
+{
+   ll n, ans = 0;
+   cin >> n;
+   vector<ll> a(n);
+   for(auto &e : a) cin >> e;
+   for(ll i = 0; i + 1 < n; i++)
+   {
+      if(a[i] > a[i + 1]) ans += a[i] - a[i + 1];
+   }
+   cout << ans << endl;
+}
+
+void solve581C()
+{
+   ll n, k, cnt = 0;
+   cin >> n >> k;
+   vector<ll> a(n);
+   for(auto& e : a) {cin >> e; if(e == 100) cnt++;}
+   sort(a.begin(), a.end(), [](ll x, ll y)
+   { return (10 - (x % 10))  < (10 - (y % 10));});
+   //for(auto e : a) cout << e << " "; cout << endl;
+   bool f = true;
+   while(k > 0 && cnt < n)
+   {
+      for(int i = 0; i < n; i = (i + 1) % n)
+      {
+         if(a[i] == 100) continue;
+         ll need = 10 - (a[i] % 10);
+         if(k >= need) {k -= need; a[i] += need; if(a[i] == 100) cnt++;}
+         else {f = false; break;}
+         if(cnt == n) {f = false; break;}
+      }
+      if(f == false) break;
+   }
+   ll ans = 0;
+   for(auto e : a) ans += e / 10;
+   cout << ans << endl;
+}
+
+void solve1494B()
+{
+   int n, up, right, left, down, remup, remright, remdown, remleft;
+   cin >> n >> up >> right >> down >> left;
+   for(int mask = 0; mask < 16; mask++)
+   {
+      remup = up, remdown = down, remright = right, remleft = left;
+      if(mask & 1) {remdown--; remright--;}
+      if(mask & 2) {remdown--; remleft--;}
+      if(mask & 4) {remup--; remright--;}
+      if(mask & 8) {remup--; remleft--;}
+      if(remup >= 0 && remdown >= 0 && remleft >= 0 && remright >= 0 &&
+      remup <= n - 2 && remdown <= n - 2 && remleft <= n - 2 && remright <= n - 2) 
+      {cout << "YES" << endl; return;}
+   }
+   cout << "NO" << endl;
+}
+
+void solve1728C()
+{
+   ll n, x, ans = 0;
+   cin >> n;
+   priority_queue<ll> a, b;
+   for(int i = 0; i < n; i++) {cin >> x; a.push(x);}
+   for(int i = 0; i < n; i++) {cin >> x; b.push(x);}
+   while(a.size() > 0)
+   {
+      ll p = a.top();
+      ll q = b.top();
+      a.pop();
+      b.pop();
+      if(p == q) continue;
+      if(p > q) p = (ll)log10(p) + 1;
+      else q = (ll)log10(q) + 1;
+      a.push(p);
+      b.push(q);
+      ans++;
+   }
+   cout << ans << endl;
+}
+
+void solve1832B()
+{
+   ll n, k, ans = 0;
+   cin >> n >> k;
+   vector<ll> a(n), pref(n + 1, 0);
+   for(auto &e : a) cin >> e;
+   sort(a.begin(), a.end());
+   for(int i = 1; i <= n; i++) pref[i] += pref[i - 1] + a[i - 1];
+   //for(auto e : pref) cout << e << " "; cout << endl;
+   for(int l = 2 * k, r = 0; l >= 0; l -= 2, r++)
+   {
+      ll right = n - r;
+      ll left = l;
+      ans = max(ans, pref[right] - pref[left]);
+   }
+   cout << ans << endl;
+   
+}
+
+void solve1832A()
+{
+   string s; int uni = 0;
+   cin >> s;
+   map<char, int> st;
+   for(int i = 0; i < s.size(); i++) {st[s[i]]++; if(st[s[i]] == 2) uni++;}
+   if(uni >= 2) cout << "YES" << endl;
+   else cout << "NO" << endl;
+}
+
+void solve1832C()
+{
+   int n, ans = 0;
+   cin >> n;
+   vector<int> a;
+   for(int i = 0; i < n; i++)
+   {
+      int x;
+      cin >> x;
+      if(i == 0) a.push_back(x);
+      else if(x != a.back()) a.push_back(x);
+   }
+   //for(auto e : a) cout << e << " "; cout << endl;
+   n = a.size();
+   if(n == 1) {cout << 1 << endl; return;}
+   for(int j = 1; j <= n - 2; j++)
+   {
+      if(a[j] > a[j + 1] && a[j] > a[j - 1] ||
+      a[j] < a[j + 1] && a[j] < a[j - 1]) ans++;
+   }
+   ans += 2;
+   cout << ans << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
