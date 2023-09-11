@@ -14,27 +14,27 @@ int bfs(int i, int j, vector<vector<int>>& a, vector<bool>& visited)
         q.pop();
         int x = curr.first, y = curr.second;
         //cout << x << " " << y << endl;
-        visited[x * (int) a[x].size() - 1 + y + 1] = true;
+        visited[x * (int) a[x].size() + y] = true;
         val += a[x][y];
-        if(x - 1 >= 0 && !visited[(x - 1) * (int)a[x - 1].size() - 1 + y + 1])
+        if(x - 1 >= 0 && !visited[(x - 1) * (int)a[x - 1].size() + y])
         {
             q.push(make_pair(x - 1, y));
-            visited[(x - 1) * (int)a[x - 1].size() - 1 + y + 1];
+            visited[(x - 1) * (int)a[x - 1].size() + y] = true;
         }
-        if(x + 1 < (int)a.size() && !visited[(x + 1) * (int)a[x + 1].size() - 1 + y + 1])
+        if(x + 1 < (int)a.size() && !visited[(x + 1) * (int)a[x + 1].size() + y])
         {
             q.push(make_pair(x + 1, y));
-            visited[(x + 1) * (int)a[x + 1].size() - 1 + y + 1] = true;
+            visited[(x + 1) * (int)a[x + 1].size() + y] = true;
         }
-        if(y - 1 >= 0 && !visited[(x) * (int)a[x].size() - 1 + y + 1 - 1])
+        if(y - 1 >= 0 && !visited[(x) * (int)a[x].size() + y - 1])
         {
             q.push(make_pair(x, y - 1));
-            visited[(x) * (int)a[x].size() - 1 + y + 1 - 1];
+            visited[(x) * (int)a[x].size() + y - 1] = true;
         }
-        if(y + 1 < (int)a[x].size() && !visited[(x) * (int)a[x].size() - 1 + y + 2])
+        if(y + 1 < (int)a[x].size() && !visited[(x) * (int)a[x].size() + y + 1])
         {
             q.push(make_pair(x, y + 1));
-            visited[(x) * (int)a[x].size() - 1 + y + 2] = true;
+            visited[(x) * (int)a[x].size() + y + 1] = true;
         }
         //cout << "hi" << endl;
         //for(auto e : visited) cout << e << " "; cout << endl;
@@ -55,7 +55,7 @@ void solve()
         for(int j = 0; j < m; j++)
         {
             cin >> a[i][j];
-            if(a[i][j] == 0) visited[(i * m - 1) + j + 1] = true;
+            if(a[i][j] == 0) visited[(i * m) + j] = true;
         }
     }
 
@@ -65,13 +65,11 @@ void solve()
         {
             //cout << i << " " << j << endl;
             int curr = 0;
-            int p = (i * m - 1) + j + 1;
-            if(visited[p] == true) continue;
+            if(visited[(i * m) + j] == true) continue;
             curr = bfs(i, j, a, visited);
             ans = max(ans, curr);
         }
     }
-
     cout << ans << endl;
 }
 
