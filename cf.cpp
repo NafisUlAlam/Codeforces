@@ -15885,6 +15885,177 @@ void solve1869B()
    cout << min(cost, cost1 + cost2) << endl;
 }
 
+void solve805A()
+{
+   int l, r;
+   cin >> l >> r;
+   if(l < r) cout << 2 << endl;
+   else cout << l << endl;
+}
+
+void solve385A()
+{
+   int n, c, ans = 0;
+   cin >> n >> c;
+   vector<int> a(n);
+   for(auto &e : a) cin >> e;
+   for(int i = 0; i + 1 < n; i++)
+   {
+      if(a[i] >= a[i + 1]) ans = max(ans, a[i] - a[i + 1] - c);
+   }
+   cout << ans << endl;
+}
+
+void solve109A()
+{
+   int n, four = 0, seven = 0, len = INT_MAX, f = 0, s = 0; string ans;
+   cin >> n;
+   for(int b = 0; (n - (7 * b)) >= 0; b++)
+   {
+      if((n - (7 * b)) % 4 == 0) 
+      {
+         four = (n - (7 * b)) / 4; 
+         seven = b; 
+         if(len > four + seven)
+         {
+            len = four + seven;
+            f = four;
+            s = seven;
+         }
+      } 
+   }
+   for(int i = 0; i < f + s; i++)
+   {
+      if(i < f)ans.push_back('4');
+      else ans.push_back('7');
+   }
+   if(ans.size() == 0) cout << -1 << endl;
+   else cout << ans << endl;
+}
+
+void solve1068A()
+{
+   ll n, m, k, l;
+   cin >> n >> m >> k >> l;
+   if(n - k < l) cout << -1 << endl;
+   else
+   {
+      if(( n / m ) * m - k < l) cout << -1 << endl;
+      else
+      {
+         ll ans = -1, left = 1, right = (n / m);
+         while(left <= right)
+         {
+            ll mid = (left + right) / 2;
+            if( (mid * m) - k >= l)
+            {
+               ans = mid;
+               right = mid - 1;
+            }
+            else left = mid + 1;
+         }
+         cout << ans << endl;
+      }
+   }
+}
+
+void solve197B()
+{
+   int n, m, p = 0, q = 0;
+   cin >> n >> m;
+   vector<int> a(n + 1), b(m + 1);
+   for(int i = 0; i <= n; i++) cin >> a[i];
+   for(auto &e: b) cin >> e;
+   while(p <= n && a[p] == 0) p++;
+   while(q <= m && b[q] == 0) q++;
+   //cout << p << " " << q << endl;
+   //cout << a[p] << " " << b[q] << endl;
+   if(n - p < m - q)cout << "0/1" << endl;
+   else if(n - p == m - q) 
+   {
+      bool flag = false;
+      if(a[p] > 0)
+      {
+         if(b[q] < 0) {b[q] *= -1; flag = true;}
+      }
+      else
+      {
+         if(b[q] > 0) {a[p] *= -1; flag = true;}
+      }
+      int gc = __gcd(a[p], b[q]);
+      if(flag) cout << "-" << a[p]/gc <<"/" <<b[q]/gc << endl;
+      else cout << a[p]/gc <<"/" <<b[q]/gc << endl;
+   }
+   else
+   {
+      if( ((a[p] ^ b[q]) >> 31) < 0) cout << "-Infinity" << endl;
+      else cout << "Infinity" << endl;
+   }
+}
+
+void solve226A()
+{
+   ll n, m, n1;
+   cin >> n >> m;
+   n1 = n;
+   ll result = 1, base = 3;
+   while(n1 > 0)
+   {
+      //cout << n1 << endl;
+      if(n1 & 1)
+      {
+         n1 -= 1;
+         result = (result * base) % m;
+      }
+      else
+      {
+         base = (base * base) % m;
+         n1 = n1 >> 1;
+      }
+   }
+   cout << (result - 1 + m) % m << endl;
+}
+
+void solve1873F()
+{
+   ll n, k, maxi = 0, sum = 0;
+   cin >> n >> k;
+   vector<ll> a(n + 1), h(n + 1);
+   for(int i = 0; i < n; i++) cin >> a[i];
+   for(int i = 0; i < n; i++) cin >> h[i];
+   a[n] = 0;
+   h[n] = h[n - 1];
+   ll l = 0, r = 0, additional = 0;
+   for(r = 0; r < n; r++)
+   {
+      if(h[r] % h[r + 1] == 0)
+      {
+         sum += a[r];
+         while(sum > k)
+         {
+            sum -= a[l];
+            l++;
+         }
+         maxi = max(maxi, r - l + 1);
+      }
+      else 
+      {
+         //cout << l << " " << r << " " << sum << endl;
+         sum += a[r];
+         while(sum > k)
+         {
+            sum -= a[l];
+            l++;
+         }
+         maxi = max(maxi, r - l + 1);
+         l = r + 1;
+         sum = 0;
+         //cout << l << " " << r << " " << sum << endl;
+      }
+   }
+   cout << maxi << endl;
+}
+
 int main()
 { 
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
