@@ -2,36 +2,42 @@
 #define ll long long
 using namespace std;
 
-void dfs(ll sum, map<ll, ll>& cnt)
-{
-    if(cnt[sum] > 0 || sum == 1)
-    {
-        cnt[sum]--;
-        return;
-    }
-    dfs(sum / 2, cnt);
-    dfs((sum + 1) / 2, cnt);
-
-}
-
 void solve()
 {
     ll n, sum = 0;
-    map<ll, ll> cnt;
     cin >> n;
-    for(int i = 1, x; i <= n; i++)
+    vector<ll> a(n);
+    for(int i = 0, x; i < n; i++)
     {
         cin >> x;
-        cnt[x]++;
+        a[i] = x;
         sum += x;
     }
-
-    dfs(sum, cnt);
-    for(auto e : cnt)
+    sort(a.begin(), a.end());
+    priority_queue<ll> pq;
+    pq.push(sum);
+    while(a.size() > 0 || pq.size() > 0)
     {
-        if(e.second != 0) {cout << "NO" << endl; return;}
+        if(pq.size() > 0)
+        {
+            ll x = pq.top();
+            pq.pop();
+            if(a.size() > 0)
+            {
+                ll y = a.back();
+                if(x < y) break;
+                else if (x == y) a.pop_back();
+                else
+                {
+                    pq.push(x / 2);
+                    pq.push((x + 1) / 2);
+                }
+            }
+            else break;
+        }
     }
-    cout << "YES" << endl;
+    if(a.size() == 0 && pq.size() == 0) cout << "YES" << endl;
+    else cout << "NO" << endl;
 }
 
 int main()
